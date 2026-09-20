@@ -158,6 +158,10 @@ Then set Pages source to the `docs` branch/folder.
   the Bohr animation is the only continuously rendering path and pauses when
   offscreen or hidden.
 
+## Author
+
+Built by **Mahim Mazidul** ([@mahimmazidul](https://github.com/mahimmazidul)).
+
 ## License
 
-MIT.
+MIT — see [LICENSE](./LICENSE). Copyright (c) 2024 Mahim Mazidul.

@@ -10,6 +10,7 @@
     "docs": "node build.mjs --out docs"
   },
   "keywords": ["atomic", "chemistry", "education", "canvas", "offline", "pwa"],
+  "author": "Mahim Mazidul (@mahimmazidul)",
   "license": "MIT",
   "engines": { "node": ">=18" }
 }
