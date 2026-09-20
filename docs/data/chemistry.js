@@ -18,7 +18,13 @@ export const L_NAME = { 0: 's', 1: 'p', 2: 'd', 3: 'f' };
 // Expand a shorthand configuration (which may contain [Noble] tokens) into a
 // flat space-separated list of "nl<count>" tokens, e.g. "1s2 2s2 2p6".
 export function expand(shorthand) {
-  const tokens = shorthand.trim().split(/\s+/);
+  // Sanitize: remove leading '*' (unconfirmed configs) and fix missing spaces like "5d16s2" -> "5d1 6s2"
+  let s = String(shorthand).replace(/^\*+/, '').trim();
+  // Insert space between two subshell tokens stuck together: e.g. "5d16s2" -> "5d1 6s2"
+  s = s.replace(/([spdf]\d+)(\d+[spdf])/g, '$1 $2');
+  // Also handle "[Xe]5d1" -> "[Xe] 5d1"
+  s = s.replace(/(\])(?=\d)/g, '$1 ');
+  const tokens = s.split(/\s+/).filter(Boolean);
   const out = [];
   for (const tok of tokens) {
     const m = tok.match(/^\[(\w+)\]$/);
@@ -38,9 +44,9 @@ export function expand(shorthand) {
 export function parseSubshells(shorthand) {
   const full = expand(shorthand);
   const subs = [];
-  for (const tok of full.trim().split(/\s+/)) {
+  for (const tok of full.trim().split(/\s+/).filter(Boolean)) {
     const m = tok.match(/^(\d+)([spdf])(\d+)$/);
-    if (!m) throw new Error('Bad subshell token: ' + tok);
+    if (!m) throw new Error('Bad subshell token: ' + tok + ' in "' + shorthand + '"');
     const n = Number(m[1]);
     const l = L_OF[m[2]];
     const count = Number(m[3]);

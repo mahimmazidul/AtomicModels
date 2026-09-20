@@ -97,6 +97,7 @@ function elementPage(el) {
   });
 
   let html = read('src/templates/element.html');
+  const kToC = k => k==null ? '—' : `${(k-273.15).toFixed(1)}°C / ${k}K`;
   html = html
     .replaceAll('{{TITLE}}', `${el.name} (${el.sym}) — Atomic Model Explorer`)
     .replaceAll('{{DESC}}', `Facts and simplified atomic-model diagrams for ${el.name} (${el.sym}, atomic number ${el.z}): electron configuration ${el.config}, electrons per shell ${sh.join(', ')}, and how Dalton, Thomson, Rutherford, Bohr and the quantum model describe it.`)
@@ -108,6 +109,17 @@ function elementPage(el) {
     .replaceAll('{{CONFIG}}', el.config)
     .replaceAll('{{SHELLS}}', sh.join(', '))
     .replaceAll('{{CAT}}', el.cat)
+    .replaceAll('{{GROUP}}', el.group ?? '—')
+    .replaceAll('{{PERIOD}}', String(el.period))
+    .replaceAll('{{BLOCK}}', el.block)
+    .replaceAll('{{PHASE}}', el.phase || '—')
+    .replaceAll('{{APPEARANCE}}', el.appearance || '—')
+    .replaceAll('{{DENSITY}}', el.density!=null ? `${el.density} g/cm³` : '—')
+    .replaceAll('{{MELT}}', kToC(el.melt))
+    .replaceAll('{{BOIL}}', kToC(el.boil))
+    .replaceAll('{{EN}}', el.electronegativity!=null ? String(el.electronegativity) : '—')
+    .replaceAll('{{DISCOVERED}}', el.discoveredBy || '—')
+    .replaceAll('{{SUMMARY}}', el.summary || '—')
     .replaceAll('{{ISOTOPE_LINE}}', isoLine)
     .replaceAll('{{SVG}}', bohrSVG(el))
     .replaceAll('{{MODEL_NOTES}}', notes)
@@ -152,6 +164,7 @@ function main() {
   copy('src/css/styles.css');
   copy('src/js');
   copy('src/data');
+  copy('src/assets');
   copy('src/sw.js');
 
   // Build index.html

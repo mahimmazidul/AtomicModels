@@ -24,7 +24,12 @@
   <main class="layout">
     <section class="stage" aria-label="Simplified atom diagram for {{NAME}}">
       <div class="canvas-wrap">{{SVG}}</div>
-      <p class="caption">Simplified Bohr-style schematic — not to scale. Open the interactive explorer for the Thomson, Rutherford and quantum-mechanical views.</p>
+      <p class="caption">Simplified Bohr-style schematic — not to scale. Open the interactive explorer for Thomson, Rutherford and quantum views.</p>
+      <div class="periodic-card" style="margin-top:1rem">
+        <h2>Periodic table location</h2>
+        <p>Group {{GROUP}} · Period {{PERIOD}} · Block {{BLOCK}} · {{PHASE}}</p>
+        <p>Category: {{CAT}} · Appearance: {{APPEARANCE}}</p>
+      </div>
     </section>
 
     <aside class="info" aria-label="Facts about {{NAME}}">
@@ -38,6 +43,18 @@
           <p>Electrons per shell: <span>{{SHELLS}}</span></p>
           <p>{{ISOTOPE_LINE}}</p>
         </div>
+      </div>
+
+      <div class="props-card">
+        <h2>Physical properties</h2>
+        <dl class="prop-grid">
+          <div class="prop-item"><dt>Density</dt><dd>{{DENSITY}}</dd></div>
+          <div class="prop-item"><dt>Melting</dt><dd>{{MELT}}</dd></div>
+          <div class="prop-item"><dt>Boiling</dt><dd>{{BOIL}}</dd></div>
+          <div class="prop-item"><dt>Electronegativity</dt><dd>{{EN}}</dd></div>
+          <div class="prop-item"><dt>Discovered by</dt><dd>{{DISCOVERED}}</dd></div>
+          <div class="prop-item"><dt>Summary</dt><dd>{{SUMMARY}}</dd></div>
+        </dl>
       </div>
 
       <article class="model-info">

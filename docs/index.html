@@ -59,9 +59,7 @@
       <div class="search-row">
         <div class="search-wrap">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="6"></circle><path d="m21 21-3.5-3.5"></path></svg>
-          <input id="element-search" list="element-list" type="search" autocomplete="off"
-                 placeholder="Search name, symbol or number"
-                 aria-describedby="search-help" />
+          <input id="element-search" list="element-list" type="search" autocomplete="off" placeholder="Search name, symbol or number" aria-describedby="search-help" />
         </div>
         <datalist id="element-list"><option value="1 · H · Hydrogen"></option>
         <option value="2 · He · Helium"></option>
@@ -117,7 +115,7 @@
         <option value="52 · Te · Tellurium"></option>
         <option value="53 · I · Iodine"></option>
         <option value="54 · Xe · Xenon"></option>
-        <option value="55 · Cs · Caesium"></option>
+        <option value="55 · Cs · Cesium"></option>
         <option value="56 · Ba · Barium"></option>
         <option value="57 · La · Lanthanum"></option>
         <option value="58 · Ce · Cerium"></option>
@@ -181,11 +179,10 @@
         <option value="116 · Lv · Livermorium"></option>
         <option value="117 · Ts · Tennessine"></option>
         <option value="118 · Og · Oganesson"></option></datalist>
-        <span id="search-help" class="sr-only">Type an element name, symbol, or atomic number and press Enter. Use the list to browse all 118 elements.</span>
+        <span id="search-help" class="sr-only">Type an element name, symbol, or atomic number and press Enter.</span>
         <button id="element-random" class="btn" type="button">Random</button>
       </div>
     </div>
-
     <div class="control">
       <label>Atomic model</label>
       <div class="models" role="radiogroup" aria-label="Atomic model">
@@ -212,6 +209,13 @@
       </div>
       <p class="caption">Simplified educational diagram — not to scale. Tap, click, or focus a part to inspect it.</p>
       <div class="parts" id="parts" hidden aria-label="Inspectable parts"></div>
+
+      <div class="periodic-card" style="margin-top:1rem">
+        <h2>Periodic table location</h2>
+        <div class="periodic-wrap"><div id="periodic-mini" class="periodic-grid" aria-label="Mini periodic table"></div></div>
+        <div class="periodic-legend" id="periodic-legend"></div>
+        <p style="font-size:.78rem;color:var(--muted);margin:.5rem 0 0">Group <span id="el-group">—</span> · Period <span id="el-period">—</span> · Block <span id="el-block">—</span> · <span id="el-phase">—</span></p>
+      </div>
     </section>
 
     <aside class="info" aria-label="Element and model information">
@@ -221,9 +225,28 @@
           <h2 id="el-name">Carbon</h2>
           <p>Atomic number <strong id="el-number">6</strong> · <span id="el-mass"></span></p>
           <p>Electron configuration: <code id="el-config"></code></p>
-          <p>Shells: <span id="el-shells"></span></p>
+          <p>Shells: <span id="el-shells"></span> · <span id="el-cat-label" style="text-transform:capitalize"></span></p>
           <p id="el-isotope"></p>
         </div>
+      </div>
+
+      <div class="image-card" id="image-card">
+        <div class="img-wrap" id="img-wrap">
+          <img id="el-image" alt="" loading="lazy" style="display:none" />
+          <div id="el-image-fallback" class="img-fallback">C</div>
+        </div>
+        <div class="img-caption">
+          <span id="el-appearance">—</span>
+          <span id="el-discovered">—</span>
+        </div>
+      </div>
+
+      <div class="props-card">
+        <h2>Physical properties</h2>
+        <dl class="prop-grid" id="props-grid">
+          <!-- populated by JS -->
+        </dl>
+        <p id="el-summary" style="font-size:.86rem;color:var(--muted);margin:.8rem 0 0;line-height:1.5"></p>
       </div>
 
       <article class="model-info" aria-live="polite">
@@ -244,21 +267,21 @@
   <details style="padding: 0 1rem 1.5rem; max-width: var(--maxw); margin: 0 auto;">
     <summary style="cursor:pointer; color: var(--fg); font-weight: 650; font-size: .9rem;">About the five atomic models (static, crawlable)</summary>
     <div class="info" style="margin-top:1rem">
-      <article class="model-info"><h2>Dalton — Solid Sphere (1803)</h2><p>Each element is made of tiny, indivisible, identical spheres. Mass distinguishes elements; they combine in fixed whole-number ratios.</p><h3>Limitations</h3><p>Atoms contain protons, neutrons and electrons, and occur as isotopes; the solid sphere cannot explain spectra, bonding, or radioactivity.</p></article>
-      <article class="model-info"><h2>Thomson — Plum Pudding (1904)</h2><p>A positively charged sphere with electrons embedded throughout, like plums in a pudding, neutral overall.</p><h3>Limitations</h3><p>Cannot explain large-angle alpha scattering or discrete line spectra.</p></article>
-      <article class="model-info"><h2>Rutherford — Nuclear (1911)</h2><p>Atoms are mostly empty space with a tiny, dense, positive nucleus; electrons orbit at a distance.</p><h3>Limitations</h3><p>A classical orbiting electron should radiate and collapse; the model cannot explain discrete spectra.</p></article>
-      <article class="model-info"><h2>Bohr — Quantised Orbits (1913)</h2><p>Electrons occupy fixed circular orbits with quantised energies, grouped into shells (n = 1, 2, 3…). Exact for hydrogen.</p><h3>Limitations</h3><p>Only accurate for one-electron atoms; many-electron atoms need quantum mechanics, not fixed circles.</p></article>
-      <article class="model-info"><h2>Quantum — Probability Clouds (1926)</h2><p>Electrons are described by wave functions whose square gives a probability density — orbitals (s, p, d, f), not fixed paths.</p><h3>Limitations</h3><p>Exact solutions exist only for hydrogen-like atoms; many-electron atoms require approximation methods.</p></article>
+      <article class="model-info"><h2>Dalton — Solid Sphere (1803)</h2><p>Each element is made of tiny, indivisible, identical spheres.</p></article>
+      <article class="model-info"><h2>Thomson — Plum Pudding (1904)</h2><p>A positively charged sphere with electrons embedded.</p></article>
+      <article class="model-info"><h2>Rutherford — Nuclear (1911)</h2><p>Mostly empty space with a tiny dense nucleus.</p></article>
+      <article class="model-info"><h2>Bohr — Quantised Orbits (1913)</h2><p>Fixed circular orbits with quantised energies.</p></article>
+      <article class="model-info"><h2>Quantum — Probability Clouds (1926)</h2><p>Wave functions give probability density — orbitals, not paths.</p></article>
     </div>
   </details>
 
   <footer class="app-footer">
-    <p><strong>Atomic Model Explorer</strong> — a static, offline-capable educational tool. Visualizations are simplified schematics and are not to scale. No tracking, no external requests.</p>
-    <p>Data: IUPAC standard atomic weights and ground-state electron configurations. Built with semantic HTML, Canvas 2D, and vanilla JavaScript. <a href="./sitemap.xml">Sitemap</a> · <a href="./robots.txt">Robots</a></p>
-    <p>Built by Mahim Mazidul · <a href="https://github.com/mahimmazidul/AtomicModels">github.com/mahimmazidul/AtomicModels</a></p>
+    <p><strong>Atomic Model Explorer</strong> — static, offline-capable educational tool. Visualizations are simplified schematics and are not to scale.</p>
+    <p>Data: IUPAC + Wikipedia summaries (via Periodic-Table-JSON). Built with semantic HTML, Canvas 2D, vanilla JS. <a href="./sitemap.xml">Sitemap</a></p>
+    <p>Built by Mahim Mazidul · <a href="https://github.com/mahimmazidul/AtomicModels">GitHub</a></p>
   </footer>
 
-  <noscript><p style="padding:1rem">This interactive explorer requires JavaScript for the canvas visualizations. All 118 elements and the five atomic models are described in the static pages linked from the <a href="./sitemap.xml">sitemap</a>.</p></noscript>
+  <noscript><p style="padding:1rem">This explorer requires JavaScript for canvas visualizations. All 118 elements are described in static pages linked from the <a href="./sitemap.xml">sitemap</a>.</p></noscript>
   <script type="module" src="./js/app.js"></script>
 </body>
 </html>
