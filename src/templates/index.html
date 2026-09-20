@@ -3,15 +3,28 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Atomic Model Explorer — Dalton, Thomson, Rutherford, Bohr & Quantum</title>
-  <meta name="description" content="An interactive, offline-capable explorer of the five major atomic models — Dalton, Thomson, Rutherford, Bohr and the quantum-mechanical model — for all 118 elements. Scientifically labelled, simplified visualizations with electron configurations." />
+  <title>Atomic Model Explorer — Interactive 118 Elements & 5 Atomic Models</title>
+  <meta name="description" content="Explore Dalton, Thomson, Rutherford, Bohr and quantum models for all 118 elements. Offline-capable, with element images, physical properties, periodic table locator and scientifically accurate schematics." />
+  <meta name="keywords" content="atomic model, periodic table, chemistry, Bohr model, quantum model, Dalton, Thomson, Rutherford, elements, 118 elements, electron configuration, education" />
+  <meta name="author" content="Mahim Mazidul" />
   <meta name="theme-color" content="#4f46e5" />
   <meta name="color-scheme" content="light dark" />
+  <link rel="icon" type="image/png" sizes="32x32" href="./assets/favicon-32.png" />
+  <link rel="apple-touch-icon" href="./assets/apple-touch-icon.png" />
   <link rel="manifest" href="./manifest.webmanifest" />
   <link rel="canonical" href="https://example.com/atomic-model-explorer/" />
+  <!-- Open Graph -->
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Atomic Model Explorer" />
-  <meta property="og:description" content="Explore how our picture of the atom evolved, for all 118 elements — fully offline after first load." />
+  <meta property="og:title" content="Atomic Model Explorer — 118 Elements" />
+  <meta property="og:description" content="Interactive, offline-capable explorer of five atomic models for all 118 elements with images, properties and periodic table locator." />
+  <meta property="og:url" content="https://example.com/atomic-model-explorer/" />
+  <meta property="og:image" content="./assets/icon-512.png" />
+  <meta property="og:image:alt" content="Atom icon with nucleus and three orbits" />
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Atomic Model Explorer" />
+  <meta name="twitter:description" content="Dalton to quantum — explore atomic models for all 118 elements, offline." />
+  <meta name="twitter:image" content="./assets/icon-512.png" />
   <script>
     (function () {
       try {
@@ -30,8 +43,10 @@
     "applicationCategory": "EducationalApplication",
     "operatingSystem": "Any",
     "offlineAccess": true,
-    "description": "Interactive explorer of the five major historical and modern atomic models for all 118 elements, with simplified, scientifically labelled visualizations.",
-    "url": "https://example.com/atomic-model-explorer/"
+    "author": { "@type": "Person", "name": "Mahim Mazidul", "url": "https://github.com/mahimmazidul" },
+    "description": "Interactive explorer of the five major historical and modern atomic models for all 118 elements, with element images, physical properties and periodic table locator.",
+    "url": "https://example.com/atomic-model-explorer/",
+    "screenshot": "./assets/icon-512.png"
   }
   </script>
 </head>
@@ -44,7 +59,7 @@
       </div>
       <div class="brand-text">
         <strong>Atomic Model Explorer</strong>
-        <span>v<!--APP_VERSION--> · 118 elements · offline</span>
+        <span>v<!--APP_VERSION--> · 118 elements · offline · by Mahim Mazidul</span>
       </div>
     </div>
     <div class="header-actions">
@@ -92,13 +107,6 @@
       </div>
       <p class="caption">Simplified educational diagram — not to scale. Tap, click, or focus a part to inspect it.</p>
       <div class="parts" id="parts" hidden aria-label="Inspectable parts"></div>
-
-      <div class="periodic-card">
-        <h2>Periodic table location</h2>
-        <div class="periodic-wrap"><div id="periodic-mini" class="periodic-grid" aria-label="Mini periodic table"></div></div>
-        <div class="periodic-legend" id="periodic-legend"></div>
-        <p class="periodic-meta">Group <span id="el-group">—</span> · Period <span id="el-period">—</span> · Block <span id="el-block">—</span> · <span id="el-phase">—</span></p>
-      </div>
     </section>
 
     <aside class="info" aria-label="Element and model information">
@@ -145,11 +153,20 @@
     </aside>
   </main>
 
+  <section class="periodic-section" aria-label="Periodic table location">
+    <div class="periodic-card">
+      <h2>Periodic table location</h2>
+      <div class="periodic-wrap"><div id="periodic-mini" class="periodic-grid" aria-label="Mini periodic table"></div></div>
+      <div class="periodic-legend" id="periodic-legend"></div>
+      <p class="periodic-meta">Group <span id="el-group">—</span> · Period <span id="el-period">—</span> · Block <span id="el-block">—</span> · <span id="el-phase">—</span></p>
+    </div>
+  </section>
+
   <section class="about-section" aria-label="About atomic models">
     <div class="about-inner">
       <header class="about-header">
         <h2>About the five atomic models</h2>
-        <p>Static, crawlable reference — how our picture of the atom evolved from a solid sphere to probability clouds.</p>
+        <p>Static, crawlable reference — how our picture of the atom evolved from a solid sphere to probability clouds. All visualizations are simplified, not to scale.</p>
       </header>
       <div class="about-grid">
         <article class="about-card">

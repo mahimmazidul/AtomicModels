@@ -1,17 +1,35 @@
 {
   "name": "Atomic Model Explorer",
   "short_name": "Atomic Models",
-  "description": "Interactive explorer of the five major atomic models for all 118 elements.",
+  "description": "Interactive explorer of the five major atomic models for all 118 elements with images, properties and periodic table locator.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#1d4ed8",
+  "background_color": "#fcfcfd",
+  "theme_color": "#4f46e5",
   "icons": [
     {
-      "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCA2NCA2NCc+PGNpcmNsZSBjeD0nMzInIGN5PSczMicgcj0nNicgZmlsbD0nIzFkNGVkOCcvPjxnIGZpbGw9J25vbmUnIHN0cm9rZT0nIzFkNGVkOCcgc3Ryb2tlLXdpZHRoPSczJz48ZWxsaXBzZSBjeD0nMzInIGN5PSczMicgcng9JzI2JyByeT0nMTEnLz48ZWxsaXBzZSBjeD0nMzInIGN5PSczMicgcng9JzI2JyByeT0nMTEnIHRyYW5zZm9ybT0ncm90YXRlKDYwIDMyIDMyKScvPjxlbGxpcHNlIGN4PSczMicgY3k9JzMyJyByeD0nMjYnIHJ5PScxMScgdHJhbnNmb3JtPSdyb3RhdGUoMTIwIDMyIDMyKScvPjwvZz48L3N2Zz4=",
-      "sizes": "64x64",
-      "type": "image/svg+xml",
+      "src": "./assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./assets/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./assets/favicon-32.png",
+      "sizes": "32x32",
+      "type": "image/png",
       "purpose": "any"
     }
   ]

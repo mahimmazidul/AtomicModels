@@ -191,19 +191,22 @@ function main() {
     urls.push(BASE_URL + `models/${file}`);
   }
 
-  // Manifest (with inline SVG icon, base64)
-  const iconSvg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><circle cx='32' cy='32' r='6' fill='#1d4ed8'/><g fill='none' stroke='#1d4ed8' stroke-width='3'><ellipse cx='32' cy='32' rx='26' ry='11'/><ellipse cx='32' cy='32' rx='26' ry='11' transform='rotate(60 32 32)'/><ellipse cx='32' cy='32' rx='26' ry='11' transform='rotate(120 32 32)'/></g></svg>`;
-  const iconB64 = Buffer.from(iconSvg).toString('base64');
+  // Manifest with real icons
   const manifest = {
     name: 'Atomic Model Explorer',
     short_name: 'Atomic Models',
-    description: 'Interactive explorer of the five major atomic models for all 118 elements.',
+    description: 'Interactive explorer of the five major atomic models for all 118 elements with images, properties and periodic table locator.',
     start_url: './index.html',
     scope: './',
     display: 'standalone',
-    background_color: '#ffffff',
-    theme_color: '#1d4ed8',
-    icons: [{ src: `data:image/svg+xml;base64,${iconB64}`, sizes: '64x64', type: 'image/svg+xml', purpose: 'any' }]
+    background_color: '#fcfcfd',
+    theme_color: '#4f46e5',
+    icons: [
+      { src: './assets/icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any maskable' },
+      { src: './assets/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any maskable' },
+      { src: './assets/apple-touch-icon.png', sizes: '180x180', type: 'image/png', purpose: 'any' },
+      { src: './assets/favicon-32.png', sizes: '32x32', type: 'image/png', purpose: 'any' }
+    ]
   };
   write('manifest.webmanifest', JSON.stringify(manifest, null, 2));
 

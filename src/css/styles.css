@@ -183,9 +183,17 @@ code { font-family: var(--mono); font-size: .9em; }
 @media (min-width: 980px) { .layout { grid-template-columns: minmax(0, 1.15fr) 400px; } }
 @media (min-width: 1220px) { .layout { grid-template-columns: minmax(0, 1.2fr) 440px; } }
 
-/* stage */
+/* stage - sticky only for canvas, not for periodic */
 .stage { min-width: 0; position: relative; }
-@media (min-width: 980px) { .stage { position: sticky; top: 72px; } }
+@media (min-width: 980px) { .stage { position: sticky; top: 72px; align-self: start; } }
+
+/* periodic full-width section to avoid battle with props */
+.periodic-section {
+  max-width: var(--maxw); width: 100%; margin: 0 auto;
+  padding: 0 1rem 1.2rem;
+}
+@media (min-width: 760px) { .periodic-section { padding: 0 1.2rem 1.4rem; } }
+.periodic-section .periodic-card { max-width: 760px; margin: 0 auto; }
 .canvas-wrap {
   position: relative; width: 100%; max-width: 620px; aspect-ratio: 1 / 1; max-height: min(78vh, 620px);
   margin: 0 auto; border-radius: var(--radius-lg);
@@ -370,6 +378,17 @@ code { font-family: var(--mono); font-size: .9em; }
 .app-footer a { color: var(--fg); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--border-strong); }
 .app-footer a:hover { color: var(--accent); }
 
+/* print */
+@media print {
+  .app-header, .controls, .view-tools, .parts, .header-actions { display: none !important; }
+  .layout { display: block !important; }
+  .stage { position: static !important; }
+  .canvas-wrap { max-width: 100% !important; break-inside: avoid; }
+  .about-section, .periodic-section, .info { display: block !important; break-inside: avoid; }
+  body { background: white !important; color: black !important; }
+  .el-card, .props-card, .periodic-card, .about-card { box-shadow: none !important; border: 1px solid #ccc !important; break-inside: avoid; }
+}
+
 :focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: 6px; }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; } }
 @media (max-width: 360px) {
@@ -377,4 +396,5 @@ code { font-family: var(--mono); font-size: .9em; }
   .controls { padding: .7rem; }
   .layout { padding: .7rem; }
   .about-section { padding: 1.6rem .8rem; }
+  .periodic-section { padding: 0 .8rem 1rem; }
 }
