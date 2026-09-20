@@ -346,19 +346,73 @@ themeBtn.addEventListener('click', () => {
 function shellsOf(el) { return computeShells(el.config); }
 function subsOf(el) { return parseSubshells(el.config); }
 
+function hexToRgb(hex) {
+  hex = (hex||'').replace('#','');
+  if (hex.length===3) hex = hex.split('').map(c=>c+c).join('');
+  if (hex.length!==6) return null;
+  return { r: parseInt(hex.slice(0,2),16), g: parseInt(hex.slice(2,4),16), b: parseInt(hex.slice(4,6),16) };
+}
+function rgbToHex(r,g,b){ return '#'+[r,g,b].map(v=>Math.max(0,Math.min(255,Math.round(v))).toString(16).padStart(2,'0')).join(''); }
+function mixHex(a,b,t){ const ra=hexToRgb(a), rb=hexToRgb(b); if(!ra||!rb) return a; return rgbToHex(ra.r+(rb.r-ra.r)*t, ra.g+(rb.g-ra.g)*t, ra.b+(rb.b-ra.b)*t); }
+
 function applyElementTheme(el) {
-  const accent = CAT_ACCENT[el.cat] || CAT_ACCENT.unknown;
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  const catAccent = CAT_ACCENT[el.cat] || CAT_ACCENT.unknown;
+  const cpk = el.cpkHex ? `#${el.cpkHex}` : catAccent;
+  // base tints per theme
+  const baseLightBg = '#fcfcfd';
+  const baseDarkBg = '#0a0b10';
+  const baseLightSurface = '#ffffff';
+  const baseDarkSurface = '#12131a';
+  const baseLightSurface2 = '#f3f4f8';
+  const baseDarkSurface2 = '#1a1d28';
+
+  // choose tint strength based on properties
+  // gas = very light, liquid = medium, solid = stronger
+  const phase = (el.phase||'').toLowerCase();
+  let tintStrength = 0.06;
+  if (phase === 'gas') tintStrength = 0.04;
+  else if (phase === 'liquid') tintStrength = 0.09;
+  else if (phase === 'solid') tintStrength = 0.07;
+  // increase tint for high electronegativity (more reactive feel)
+  if (el.electronegativity!=null && el.electronegativity > 2.5) tintStrength += 0.02;
+  if (el.electronegativity!=null && el.electronegativity > 3.5) tintStrength += 0.02;
+
   const root = document.documentElement;
+  // set data-cat for CSS hooks
+  root.setAttribute('data-cat', el.cat);
+  root.setAttribute('data-phase', phase || 'unknown');
+
+  // compute themed colors
+  const accent = catAccent;
+  const accentSoft = accent + (isDark ? '33' : '22');
+  const bg = isDark ? mixHex(baseDarkBg, catAccent, 0.18) : mixHex(baseLightBg, catAccent, tintStrength);
+  const surface = isDark ? mixHex(baseDarkSurface, catAccent, 0.14) : mixHex(baseLightSurface, catAccent, tintStrength*0.6);
+  const surface2 = isDark ? mixHex(baseDarkSurface2, catAccent, 0.16) : mixHex(baseLightSurface2, catAccent, tintStrength*0.8);
+  const surface3 = isDark ? mixHex('#232636', catAccent, 0.12) : mixHex('#eceef4', catAccent, tintStrength*0.5);
+  const border = isDark ? mixHex('#1f2332', catAccent, 0.18) : mixHex('#e5e7eb', catAccent, tintStrength*0.9);
+
+  root.style.setProperty('--bg', bg);
+  root.style.setProperty('--surface', surface);
+  root.style.setProperty('--surface-2', surface2);
+  root.style.setProperty('--surface-3', surface3);
+  root.style.setProperty('--border', border);
   root.style.setProperty('--accent', accent);
-  // soft version
-  const soft = accent + '22';
-  root.style.setProperty('--accent-soft', soft);
+  root.style.setProperty('--accent-soft', accentSoft);
   root.style.setProperty('--focus', accent);
-  // brand logo tint
+
+  // brand logo
   const logo = document.querySelector('.brand-logo');
   if (logo) {
     logo.style.background = accent;
     logo.style.color = '#ffffff';
+    logo.style.boxShadow = `0 2px 10px ${accent}44`;
+  }
+  // canvas wrap border tint
+  const canvasWrap = document.querySelector('.canvas-wrap');
+  if (canvasWrap) {
+    canvasWrap.style.borderColor = border;
+    canvasWrap.style.boxShadow = `0 1px 3px rgba(0,0,0,.08), 0 12px 32px -12px ${accent}55`;
   }
   // update theme-color meta
   const meta = document.querySelector('meta[name="theme-color"]');
@@ -373,12 +427,12 @@ function updateImage(el) {
   fallback.style.background = `var(--chip-${el.cat})`;
   fallback.style.color = `var(--chip-${el.cat}-fg)`;
 
-  // Try local asset first (offline), then Wikimedia, then fallback
   const localCandidates = [
     `./assets/elements/${el.sym}.jpg`,
+    `./assets/elements/${el.sym}.svg`,
     `./assets/elements/${el.sym}.png`,
     `../assets/elements/${el.sym}.jpg`,
-    `../assets/elements/${el.sym}.png`
+    `../assets/elements/${el.sym}.svg`,
   ];
   let tried = 0;
   const tryNext = () => {
@@ -389,7 +443,6 @@ function updateImage(el) {
       fallback.style.display = 'none';
       img.alt = `${el.name} — ${el.appearance || el.phase || ''}`;
       img.onerror = () => {
-        // try next local, then external
         if (tried < localCandidates.length) tryNext();
         else if (el.imageUrl) {
           img.src = el.imageUrl;

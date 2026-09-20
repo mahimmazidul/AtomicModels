@@ -210,11 +210,11 @@
       <p class="caption">Simplified educational diagram — not to scale. Tap, click, or focus a part to inspect it.</p>
       <div class="parts" id="parts" hidden aria-label="Inspectable parts"></div>
 
-      <div class="periodic-card" style="margin-top:1rem">
+      <div class="periodic-card">
         <h2>Periodic table location</h2>
         <div class="periodic-wrap"><div id="periodic-mini" class="periodic-grid" aria-label="Mini periodic table"></div></div>
         <div class="periodic-legend" id="periodic-legend"></div>
-        <p style="font-size:.78rem;color:var(--muted);margin:.5rem 0 0">Group <span id="el-group">—</span> · Period <span id="el-period">—</span> · Block <span id="el-block">—</span> · <span id="el-phase">—</span></p>
+        <p class="periodic-meta">Group <span id="el-group">—</span> · Period <span id="el-period">—</span> · Block <span id="el-block">—</span> · <span id="el-phase">—</span></p>
       </div>
     </section>
 
@@ -243,10 +243,8 @@
 
       <div class="props-card">
         <h2>Physical properties</h2>
-        <dl class="prop-grid" id="props-grid">
-          <!-- populated by JS -->
-        </dl>
-        <p id="el-summary" style="font-size:.86rem;color:var(--muted);margin:.8rem 0 0;line-height:1.5"></p>
+        <dl class="prop-grid" id="props-grid"></dl>
+        <p id="el-summary" class="summary-text"></p>
       </div>
 
       <article class="model-info" aria-live="polite">
@@ -264,20 +262,50 @@
     </aside>
   </main>
 
-  <details style="padding: 0 1rem 1.5rem; max-width: var(--maxw); margin: 0 auto;">
-    <summary style="cursor:pointer; color: var(--fg); font-weight: 650; font-size: .9rem;">About the five atomic models (static, crawlable)</summary>
-    <div class="info" style="margin-top:1rem">
-      <article class="model-info"><h2>Dalton — Solid Sphere (1803)</h2><p>Each element is made of tiny, indivisible, identical spheres.</p></article>
-      <article class="model-info"><h2>Thomson — Plum Pudding (1904)</h2><p>A positively charged sphere with electrons embedded.</p></article>
-      <article class="model-info"><h2>Rutherford — Nuclear (1911)</h2><p>Mostly empty space with a tiny dense nucleus.</p></article>
-      <article class="model-info"><h2>Bohr — Quantised Orbits (1913)</h2><p>Fixed circular orbits with quantised energies.</p></article>
-      <article class="model-info"><h2>Quantum — Probability Clouds (1926)</h2><p>Wave functions give probability density — orbitals, not paths.</p></article>
+  <section class="about-section" aria-label="About atomic models">
+    <div class="about-inner">
+      <header class="about-header">
+        <h2>About the five atomic models</h2>
+        <p>Static, crawlable reference — how our picture of the atom evolved from a solid sphere to probability clouds.</p>
+      </header>
+      <div class="about-grid">
+        <article class="about-card">
+          <div class="about-year">1803</div>
+          <h3>Dalton — Solid Sphere</h3>
+          <p>Each element is made of tiny, indivisible, identical spheres. Mass distinguishes elements; they combine in fixed whole-number ratios to form compounds.</p>
+          <span class="about-tag">Limitation: no internal structure</span>
+        </article>
+        <article class="about-card">
+          <div class="about-year">1904</div>
+          <h3>Thomson — Plum Pudding</h3>
+          <p>A diffuse positively charged sphere with electrons embedded throughout, like plums in a pudding. The atom is neutral overall.</p>
+          <span class="about-tag">Limitation: no nucleus, no spectra</span>
+        </article>
+        <article class="about-card">
+          <div class="about-year">1911</div>
+          <h3>Rutherford — Nuclear</h3>
+          <p>Atoms are mostly empty space with a tiny, dense, positive nucleus. Electrons orbit at a distance, like planets.</p>
+          <span class="about-tag">Limitation: classical orbits collapse</span>
+        </article>
+        <article class="about-card">
+          <div class="about-year">1913</div>
+          <h3>Bohr — Quantised Orbits</h3>
+          <p>Electrons occupy fixed circular orbits with quantised energies, grouped into shells (n = 1, 2, 3…). Works exactly for hydrogen.</p>
+          <span class="about-tag">Limitation: fails for many-electron atoms</span>
+        </article>
+        <article class="about-card featured">
+          <div class="about-year">1926</div>
+          <h3>Quantum — Probability Clouds</h3>
+          <p>Electrons are described by wave functions whose square gives probability density — orbitals (s, p, d, f), not fixed paths. The modern picture.</p>
+          <span class="about-tag">Limitation: many-electron atoms need approximations</span>
+        </article>
+      </div>
     </div>
-  </details>
+  </section>
 
   <footer class="app-footer">
     <p><strong>Atomic Model Explorer</strong> — static, offline-capable educational tool. Visualizations are simplified schematics and are not to scale.</p>
-    <p>Data: IUPAC + Wikipedia summaries (via Periodic-Table-JSON). Built with semantic HTML, Canvas 2D, vanilla JS. <a href="./sitemap.xml">Sitemap</a></p>
+    <p>Data: IUPAC + Wikipedia summaries (via Periodic-Table-JSON). Built with semantic HTML, Canvas 2D, vanilla JS. <a href="./sitemap.xml">Sitemap</a> · <a href="./robots.txt">Robots</a></p>
     <p>Built by Mahim Mazidul · <a href="https://github.com/mahimmazidul/AtomicModels">GitHub</a></p>
   </footer>
 
