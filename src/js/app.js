@@ -397,7 +397,10 @@ function updateInfo() {
   const el = state.element;
   const m = state.model;
   $('el-number').textContent = el.z;
-  $('el-symbol').textContent = el.sym;
+  const symEl = $('el-symbol');
+  symEl.textContent = el.sym;
+  symEl.style.background = `var(--chip-${el.cat})`;
+  symEl.style.color = `var(--chip-${el.cat}-fg)`;
   $('el-name').textContent = el.name;
   $('el-mass').textContent = el.mass.startsWith('[') ? `${el.mass} (most stable isotope)` : el.mass;
   $('el-config').textContent = m.kind === 'dalton'

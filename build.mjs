@@ -107,6 +107,7 @@ function elementPage(el) {
     .replaceAll('{{MASS}}', el.mass)
     .replaceAll('{{CONFIG}}', el.config)
     .replaceAll('{{SHELLS}}', sh.join(', '))
+    .replaceAll('{{CAT}}', el.cat)
     .replaceAll('{{ISOTOPE_LINE}}', isoLine)
     .replaceAll('{{SVG}}', bohrSVG(el))
     .replaceAll('{{MODEL_NOTES}}', notes)
