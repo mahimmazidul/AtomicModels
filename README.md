@@ -10,6 +10,16 @@ runtime, no external network requests, no tracking.
 > cannot accurately describe an element, the UI says so — it never invents a
 > precise simulation.
 
+**Status:** production-ready · zero runtime dependencies · essential payload ~26 KB gzipped · works offline after first load.
+
+**Highlights**
+- Five atomic models with concise, accessible explanations of principles, significance, and limitations.
+- Searchable selector for all 118 elements (by name, symbol, or atomic number).
+- Procedural Canvas 2D visualizations, clearly labelled as simplified schematics.
+- Explicit isotopes — neutron counts are never derived by rounding the atomic weight.
+- Responsive and mobile-first (down to 320 px), accessible (WCAG-minded), light/dark themes.
+- Offline support via a versioned service worker; no external requests, no tracking.
+
 ---
 
 ## Features
