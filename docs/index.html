@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Atomic Model Explorer — Dalton, Thomson, Rutherford, Bohr &amp; Quantum</title>
+  <meta name="description" content="An interactive, offline-capable explorer of the five major atomic models — Dalton, Thomson, Rutherford, Bohr and the quantum-mechanical model — for all 118 elements. Scientifically labelled, simplified visualizations with electron configurations." />
+  <meta name="theme-color" content="#1d4ed8" />
+  <meta name="color-scheme" content="light dark" />
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="canonical" href="https://example.com/atomic-model-explorer/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Atomic Model Explorer" />
+  <meta property="og:description" content="Explore how our picture of the atom evolved, for all 118 elements — fully offline after first load." />
+  <script>
+    // Apply saved theme before first paint to avoid a flash of the wrong theme.
+    (function () {
+      try {
+        var t = localStorage.getItem('ame-theme');
+        if (!t) t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="stylesheet" href="./css/styles.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Atomic Model Explorer",
+    "applicationCategory": "EducationalApplication",
+    "operatingSystem": "Any",
+    "offlineAccess": true,
+    "description": "Interactive explorer of the five major historical and modern atomic models for all 118 elements, with simplified, scientifically labelled visualizations.",
+    "url": "https://example.com/atomic-model-explorer/"
+  }
+  </script>
+</head>
+<body>
+  <a class="sr-only" href="#main">Skip to content</a>
+  <header class="app-header">
+    <div class="brand">
+      <h1>Atomic Model Explorer</h1>
+      <small>v1.0.0</small>
+    </div>
+    <button id="theme-toggle" type="button" aria-label="Toggle light and dark theme">
+      <span aria-hidden="true">◐</span> <span class="theme-text">Theme</span>
+    </button>
+  </header>
+
+  <section class="controls" aria-label="Controls">
+    <div class="control">
+      <label for="element-search">Element</label>
+      <div class="search-row">
+        <input id="element-search" list="element-list" type="search" autocomplete="off"
+               placeholder="Search name, symbol or number"
+               aria-describedby="search-help" />
+        <datalist id="element-list"><option value="1 · H · Hydrogen"></option>
+        <option value="2 · He · Helium"></option>
+        <option value="3 · Li · Lithium"></option>
+        <option value="4 · Be · Beryllium"></option>
+        <option value="5 · B · Boron"></option>
+        <option value="6 · C · Carbon"></option>
+        <option value="7 · N · Nitrogen"></option>
+        <option value="8 · O · Oxygen"></option>
+        <option value="9 · F · Fluorine"></option>
+        <option value="10 · Ne · Neon"></option>
+        <option value="11 · Na · Sodium"></option>
+        <option value="12 · Mg · Magnesium"></option>
+        <option value="13 · Al · Aluminium"></option>
+        <option value="14 · Si · Silicon"></option>
+        <option value="15 · P · Phosphorus"></option>
+        <option value="16 · S · Sulfur"></option>
+        <option value="17 · Cl · Chlorine"></option>
+        <option value="18 · Ar · Argon"></option>
+        <option value="19 · K · Potassium"></option>
+        <option value="20 · Ca · Calcium"></option>
+        <option value="21 · Sc · Scandium"></option>
+        <option value="22 · Ti · Titanium"></option>
+        <option value="23 · V · Vanadium"></option>
+        <option value="24 · Cr · Chromium"></option>
+        <option value="25 · Mn · Manganese"></option>
+        <option value="26 · Fe · Iron"></option>
+        <option value="27 · Co · Cobalt"></option>
+        <option value="28 · Ni · Nickel"></option>
+        <option value="29 · Cu · Copper"></option>
+        <option value="30 · Zn · Zinc"></option>
+        <option value="31 · Ga · Gallium"></option>
+        <option value="32 · Ge · Germanium"></option>
+        <option value="33 · As · Arsenic"></option>
+        <option value="34 · Se · Selenium"></option>
+        <option value="35 · Br · Bromine"></option>
+        <option value="36 · Kr · Krypton"></option>
+        <option value="37 · Rb · Rubidium"></option>
+        <option value="38 · Sr · Strontium"></option>
+        <option value="39 · Y · Yttrium"></option>
+        <option value="40 · Zr · Zirconium"></option>
+        <option value="41 · Nb · Niobium"></option>
+        <option value="42 · Mo · Molybdenum"></option>
+        <option value="43 · Tc · Technetium"></option>
+        <option value="44 · Ru · Ruthenium"></option>
+        <option value="45 · Rh · Rhodium"></option>
+        <option value="46 · Pd · Palladium"></option>
+        <option value="47 · Ag · Silver"></option>
+        <option value="48 · Cd · Cadmium"></option>
+        <option value="49 · In · Indium"></option>
+        <option value="50 · Sn · Tin"></option>
+        <option value="51 · Sb · Antimony"></option>
+        <option value="52 · Te · Tellurium"></option>
+        <option value="53 · I · Iodine"></option>
+        <option value="54 · Xe · Xenon"></option>
+        <option value="55 · Cs · Caesium"></option>
+        <option value="56 · Ba · Barium"></option>
+        <option value="57 · La · Lanthanum"></option>
+        <option value="58 · Ce · Cerium"></option>
+        <option value="59 · Pr · Praseodymium"></option>
+        <option value="60 · Nd · Neodymium"></option>
+        <option value="61 · Pm · Promethium"></option>
+        <option value="62 · Sm · Samarium"></option>
+        <option value="63 · Eu · Europium"></option>
+        <option value="64 · Gd · Gadolinium"></option>
+        <option value="65 · Tb · Terbium"></option>
+        <option value="66 · Dy · Dysprosium"></option>
+        <option value="67 · Ho · Holmium"></option>
+        <option value="68 · Er · Erbium"></option>
+        <option value="69 · Tm · Thulium"></option>
+        <option value="70 · Yb · Ytterbium"></option>
+        <option value="71 · Lu · Lutetium"></option>
+        <option value="72 · Hf · Hafnium"></option>
+        <option value="73 · Ta · Tantalum"></option>
+        <option value="74 · W · Tungsten"></option>
+        <option value="75 · Re · Rhenium"></option>
+        <option value="76 · Os · Osmium"></option>
+        <option value="77 · Ir · Iridium"></option>
+        <option value="78 · Pt · Platinum"></option>
+        <option value="79 · Au · Gold"></option>
+        <option value="80 · Hg · Mercury"></option>
+        <option value="81 · Tl · Thallium"></option>
+        <option value="82 · Pb · Lead"></option>
+        <option value="83 · Bi · Bismuth"></option>
+        <option value="84 · Po · Polonium"></option>
+        <option value="85 · At · Astatine"></option>
+        <option value="86 · Rn · Radon"></option>
+        <option value="87 · Fr · Francium"></option>
+        <option value="88 · Ra · Radium"></option>
+        <option value="89 · Ac · Actinium"></option>
+        <option value="90 · Th · Thorium"></option>
+        <option value="91 · Pa · Protactinium"></option>
+        <option value="92 · U · Uranium"></option>
+        <option value="93 · Np · Neptunium"></option>
+        <option value="94 · Pu · Plutonium"></option>
+        <option value="95 · Am · Americium"></option>
+        <option value="96 · Cm · Curium"></option>
+        <option value="97 · Bk · Berkelium"></option>
+        <option value="98 · Cf · Californium"></option>
+        <option value="99 · Es · Einsteinium"></option>
+        <option value="100 · Fm · Fermium"></option>
+        <option value="101 · Md · Mendelevium"></option>
+        <option value="102 · No · Nobelium"></option>
+        <option value="103 · Lr · Lawrencium"></option>
+        <option value="104 · Rf · Rutherfordium"></option>
+        <option value="105 · Db · Dubnium"></option>
+        <option value="106 · Sg · Seaborgium"></option>
+        <option value="107 · Bh · Bohrium"></option>
+        <option value="108 · Hs · Hassium"></option>
+        <option value="109 · Mt · Meitnerium"></option>
+        <option value="110 · Ds · Darmstadtium"></option>
+        <option value="111 · Rg · Roentgenium"></option>
+        <option value="112 · Cn · Copernicium"></option>
+        <option value="113 · Nh · Nihonium"></option>
+        <option value="114 · Fl · Flerovium"></option>
+        <option value="115 · Mc · Moscovium"></option>
+        <option value="116 · Lv · Livermorium"></option>
+        <option value="117 · Ts · Tennessine"></option>
+        <option value="118 · Og · Oganesson"></option></datalist>
+        <span id="search-help" class="sr-only">Type an element name, symbol, or atomic number and press Enter. Use the list to browse all 118 elements.</span>
+        <button id="element-random" type="button">Random</button>
+      </div>
+    </div>
+
+    <div class="control models" role="radiogroup" aria-label="Atomic model">
+      <span class="group-label sr-only">Atomic model</span>
+      <button class="model-btn" type="button" role="radio" data-model="dalton" aria-checked="false">Dalton</button>
+      <button class="model-btn" type="button" role="radio" data-model="thomson" aria-checked="false">Thomson</button>
+      <button class="model-btn" type="button" role="radio" data-model="rutherford" aria-checked="false">Rutherford</button>
+      <button class="model-btn" type="button" role="radio" data-model="bohr" aria-checked="false">Bohr</button>
+      <button class="model-btn" type="button" role="radio" data-model="quantum" aria-checked="false">Quantum</button>
+    </div>
+  </section>
+
+  <main id="main" class="layout">
+    <section class="stage" aria-label="Atom visualization">
+      <div class="canvas-wrap">
+        <canvas id="viz" role="img"
+                aria-label="Atomic model visualization"></canvas>
+        <div class="view-tools" role="group" aria-label="View controls">
+          <button id="zoom-in" type="button" aria-label="Zoom in">+</button>
+          <button id="zoom-out" type="button" aria-label="Zoom out">−</button>
+          <button id="zoom-reset" type="button" aria-label="Reset zoom and pan">Reset</button>
+          <button id="play-pause" type="button" aria-pressed="true" aria-label="Pause animation">
+            <span class="label">Pause</span>
+          </button>
+        </div>
+        <p class="sr-only" id="viz-desc"></p>
+      </div>
+      <p class="caption">Simplified educational diagram — not to scale. Tap, click, or focus a part to inspect it.</p>
+      <div class="parts" id="parts" hidden aria-label="Inspectable parts"></div>
+    </section>
+
+    <aside class="info" aria-label="Element and model information">
+      <div class="el-card">
+        <div class="el-symbol" id="el-symbol">C</div>
+        <div class="el-meta">
+          <h2 id="el-name">Carbon</h2>
+          <p>Atomic number <span id="el-number">6</span></p>
+          <p>Standard atomic weight: <span id="el-mass"></span></p>
+          <p>Electron configuration: <code id="el-config"></code></p>
+          <p>Electrons per shell: <span id="el-shells"></span></p>
+          <p id="el-isotope"></p>
+        </div>
+      </div>
+
+      <article class="model-info" aria-live="polite">
+        <h2 id="model-title"></h2>
+        <h3>Principle</h3><p id="model-principle"></p>
+        <h3>Significance</h3><p id="model-significance"></p>
+        <h3>Limitations</h3><p id="model-limitation"></p>
+        <h3>About this element</h3><p id="model-note"></p>
+      </article>
+
+      <div class="selection" id="selection-info" aria-live="polite">
+        <h3>Selection</h3>
+        <p id="selection-text">Tap, click, or focus a part of the model to learn what it represents.</p>
+      </div>
+    </aside>
+  </main>
+
+  <details style="padding: 0 1rem 1.5rem">
+    <summary style="cursor:pointer;color:var(--accent);font-weight:600">About the five atomic models (static, crawlable)</summary>
+    <div class="info" style="margin-top:1rem">
+      <article class="model-info">
+        <h2>Dalton — Solid Sphere (1803)</h2>
+        <p>Each element is made of tiny, indivisible, identical spheres. Mass distinguishes elements; they combine in fixed whole-number ratios.</p>
+        <h3>Limitations</h3>
+        <p>Atoms contain protons, neutrons and electrons, and occur as isotopes; the solid sphere cannot explain spectra, bonding, or radioactivity.</p>
+      </article>
+      <article class="model-info">
+        <h2>Thomson — Plum Pudding (1904)</h2>
+        <p>A positively charged sphere with electrons embedded throughout, like plums in a pudding, neutral overall.</p>
+        <h3>Limitations</h3>
+        <p>Cannot explain large-angle alpha scattering or discrete line spectra.</p>
+      </article>
+      <article class="model-info">
+        <h2>Rutherford — Nuclear (1911)</h2>
+        <p>Atoms are mostly empty space with a tiny, dense, positive nucleus; electrons orbit at a distance.</p>
+        <h3>Limitations</h3>
+        <p>A classical orbiting electron should radiate and collapse; the model cannot explain discrete spectra.</p>
+      </article>
+      <article class="model-info">
+        <h2>Bohr — Quantised Orbits (1913)</h2>
+        <p>Electrons occupy fixed circular orbits with quantised energies, grouped into shells (n = 1, 2, 3…). Exact for hydrogen.</p>
+        <h3>Limitations</h3>
+        <p>Only accurate for one-electron atoms; many-electron atoms need quantum mechanics, not fixed circles.</p>
+      </article>
+      <article class="model-info">
+        <h2>Quantum — Probability Clouds (1926)</h2>
+        <p>Electrons are described by wave functions whose square gives a probability density — orbitals (s, p, d, f), not fixed paths.</p>
+        <h3>Limitations</h3>
+        <p>Exact solutions exist only for hydrogen-like atoms; many-electron atoms require approximation methods.</p>
+      </article>
+    </div>
+  </details>
+
+  <footer class="app-footer">
+    <p>Atomic Model Explorer — a static, offline-capable educational tool. Visualizations are simplified schematics and are not to scale. No tracking, no external requests.</p>
+    <p>Data: IUPAC standard atomic weights and ground-state electron configurations. Built with semantic HTML, Canvas 2D, and vanilla JavaScript. <a href="./sitemap.xml">Sitemap</a> · <a href="./robots.txt">Robots</a></p>
+  </footer>
+
+  <noscript>
+    <p style="padding:1rem">This interactive explorer requires JavaScript for the canvas visualizations. All 118 elements and the five atomic models are described in the static pages linked from the <a href="./sitemap.xml">sitemap</a>.</p>
+  </noscript>
+
+  <script type="module" src="./js/app.js"></script>
+</body>
+</html>

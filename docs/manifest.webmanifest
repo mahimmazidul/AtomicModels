@@ -1,0 +1,18 @@
+{
+  "name": "Atomic Model Explorer",
+  "short_name": "Atomic Models",
+  "description": "Interactive explorer of the five major atomic models for all 118 elements.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1d4ed8",
+  "icons": [
+    {
+      "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCA2NCA2NCc+PGNpcmNsZSBjeD0nMzInIGN5PSczMicgcj0nNicgZmlsbD0nIzFkNGVkOCcvPjxnIGZpbGw9J25vbmUnIHN0cm9rZT0nIzFkNGVkOCcgc3Ryb2tlLXdpZHRoPSczJz48ZWxsaXBzZSBjeD0nMzInIGN5PSczMicgcng9JzI2JyByeT0nMTEnLz48ZWxsaXBzZSBjeD0nMzInIGN5PSczMicgcng9JzI2JyByeT0nMTEnIHRyYW5zZm9ybT0ncm90YXRlKDYwIDMyIDMyKScvPjxlbGxpcHNlIGN4PSczMicgY3k9JzMyJyByeD0nMjYnIHJ5PScxMScgdHJhbnNmb3JtPSdyb3RhdGUoMTIwIDMyIDMyKScvPjwvZz48L3N2Zz4=",
+      "sizes": "64x64",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

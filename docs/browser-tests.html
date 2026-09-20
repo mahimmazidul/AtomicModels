@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Atomic Model Explorer — Browser Tests</title>
+  <link rel="stylesheet" href="./css/styles.css" />
+  <style>
+    body { font-family: ui-sans-serif, system-ui, sans-serif; padding: 1rem; overflow-x: hidden; }
+    .banner { padding: .75rem 1rem; border-radius: 10px; font-weight: 700; margin-bottom: 1rem; }
+    .pass { background: #dcfce7; color: #14532d; }
+    .fail { background: #fee2e2; color: #7f1d1d; }
+    ul#results { list-style: none; padding: 0; display: grid; gap: .4rem; }
+    li { padding: .5rem .75rem; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); }
+    li.ok::before { content: "✓ "; color: #16a34a; font-weight: 700; }
+    li.no::before { content: "✗ "; color: #dc2626; font-weight: 700; }
+    li.skip::before { content: "– "; color: #6b7280; font-weight: 700; }
+    code { background: #eee; padding: 0 .25rem; border-radius: 4px; }
+    #host { border: 2px dashed #cbd5e1; border-radius: 12px; padding: .5rem; margin-top: 1rem; }
+  </style>
+</head>
+<body>
+  <h1>Atomic Model Explorer — Browser Tests</h1>
+  <p>This page injects the real app DOM, loads <code>./js/app.js</code>, and exercises model switching, keyboard, pointer/touch, responsive layout, theme, and offline (service worker) behaviour. Run it over HTTP (e.g. <code>node serve.mjs</code>) so modules and the service worker activate.</p>
+  <div id="banner" class="banner">Running…</div>
+  <ul id="results"></ul>
+  <h2>App under test</h2>
+  <div id="host"></div>
+
+  <script type="module">
+    const results = [];
+    function record(name, ok, detail) {
+      results.push({ name, ok, detail: detail || '' });
+      const li = document.createElement('li');
+      li.className = ok === true ? 'ok' : ok === false ? 'no' : 'skip';
+      li.textContent = `${name}${detail ? ' — ' + detail : ''}`;
+      document.getElementById('results').appendChild(li);
+    }
+    async function assert(name, fn) {
+      try { const d = await fn(); record(name, true, d || ''); }
+      catch (e) { record(name, false, e && e.message ? e.message : String(e)); }
+    }
+    const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+    async function main() {
+      // 1. Inject the real app DOM (strip scripts; we import the module ourselves).
+      const res = await fetch('./index.html');
+      const html = await res.text();
+      const doc = new DOMParser().parseFromString(html, 'text/html');
+      doc.querySelectorAll('script').forEach((s) => s.remove());
+      document.getElementById('host').innerHTML = doc.body.innerHTML;
+      await sleep(50);
+
+      // 2. Load the app (boot runs because #viz exists).
+      await import('./js/app.js');
+      await sleep(100);
+      const AME = window.AME;
+      if (!AME) throw new Error('window.AME not exposed by app.js');
+
+      const $ = (id) => document.getElementById(id);
+      const fire = (el, type, init) => el.dispatchEvent(new Event(type, { bubbles: true, ...init }));
+
+      await assert('element data loaded (118 elements)', async () => {
+        const mod = await import('./data/elements.js');
+        if (!mod.ELEMENTS || mod.ELEMENTS.length !== 118) throw new Error('expected 118 elements, got ' + (mod.ELEMENTS && mod.ELEMENTS.length));
+        if (!AME.state.element) throw new Error('no default element');
+        return mod.ELEMENTS.length + ' elements; default ' + AME.state.element.sym;
+      });
+
+      await assert('model switch by click updates title', () => {
+        const btns = [...document.querySelectorAll('.model-btn')];
+        btns.find((b) => b.dataset.model === 'quantum').click();
+        const t = $('model-title').textContent;
+        if (!/quantum/i.test(t)) throw new Error('title=' + t);
+        return t;
+      });
+
+      await assert('keyboard arrow moves radiogroup selection', () => {
+        const btns = [...document.querySelectorAll('.model-btn')];
+        const bohr = btns.find((b) => b.dataset.model === 'bohr');
+        bohr.focus();
+        bohr.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }));
+        const next = btns.find((b) => b.getAttribute('aria-checked') === 'true');
+        if (!next || next.dataset.model !== 'quantum') throw new Error('focus did not move (got ' + (next && next.dataset.model) + ')');
+        return 'moved to ' + next.dataset.model;
+      });
+
+      await assert('element search by name selects element', () => {
+        const inp = $('element-search');
+        inp.value = 'Oxygen';
+        fire(inp, 'change');
+        if ($('el-name').textContent !== 'Oxygen') throw new Error('got ' + $('el-name').textContent);
+        return 'Oxygen (Z=8)';
+      });
+
+      await assert('tap (pointer) on centre selects nucleus', () => {
+        AME.state.selected = null;
+        const c = $('viz');
+        const r = c.getBoundingClientRect();
+        const x = r.left + r.width / 2, y = r.top + r.height / 2;
+        c.dispatchEvent(new PointerEvent('pointerdown', { pointerId: 1, clientX: x, clientY: y, bubbles: true }));
+        c.dispatchEvent(new PointerEvent('pointerup', { pointerId: 1, clientX: x, clientY: y, bubbles: true }));
+        if (AME.state.selected !== 'nucleus') throw new Error('selected=' + AME.state.selected);
+        if (!/nucleus/i.test($('selection-info').textContent)) throw new Error('no nucleus text');
+        return 'nucleus selected';
+      });
+
+      await assert('drag (pointer move) does NOT select', () => {
+        AME.state.selected = null;
+        const c = $('viz');
+        const r = c.getBoundingClientRect();
+        const x = r.left + r.width / 2, y = r.top + r.height / 2;
+        c.dispatchEvent(new PointerEvent('pointerdown', { pointerId: 2, clientX: x, clientY: y, bubbles: true }));
+        c.dispatchEvent(new PointerEvent('pointermove', { pointerId: 2, clientX: x + 45, clientY: y + 12, bubbles: true }));
+        c.dispatchEvent(new PointerEvent('pointerup', { pointerId: 2, clientX: x + 45, clientY: y + 12, bubbles: true }));
+        if (AME.state.selected !== null) throw new Error('drag selected: ' + AME.state.selected);
+        return 'no selection after drag';
+      });
+
+      await assert('zoom-in button increases zoom', () => {
+        const z0 = AME.state.zoom;
+        $('zoom-in').click();
+        if (!(AME.state.zoom > z0)) throw new Error('zoom ' + z0 + '->' + AME.state.zoom);
+        return z0 + ' -> ' + AME.state.zoom;
+      });
+
+      await assert('reset restores zoom to 1', () => {
+        $('zoom-reset').click();
+        if (AME.state.zoom !== 1) throw new Error('zoom=' + AME.state.zoom);
+        return 'zoom reset';
+      });
+
+      await assert('play/pause toggles animation state (Bohr)', () => {
+        const btns = [...document.querySelectorAll('.model-btn')];
+        btns.find((b) => b.dataset.model === 'bohr').click();
+        const before = AME.state.playing;
+        $('play-pause').click();
+        if (AME.state.playing === before) throw new Error('playing unchanged');
+        return 'toggled';
+      });
+
+      await assert('theme toggle flips data-theme', () => {
+        const before = document.documentElement.getAttribute('data-theme');
+        $('theme-toggle').click();
+        const after = document.documentElement.getAttribute('data-theme');
+        if (after === before) throw new Error('theme unchanged');
+        return before + ' -> ' + after;
+      });
+
+      await assert('no horizontal overflow / responsive base', () => {
+        const ox = getComputedStyle(document.body).overflowX;
+        const noHScroll = document.documentElement.scrollWidth <= window.innerWidth + 1;
+        if (ox !== 'hidden') throw new Error('body overflow-x=' + ox);
+        if (!noHScroll) throw new Error('horizontal scroll present');
+        return 'overflow-x hidden, no h-scroll';
+      });
+
+      await assert('visualizer exposes parts for the selected element', () => {
+        const parts = AME.viz.getParts();
+        if (!Array.isArray(parts) || parts.length === 0) throw new Error('no parts');
+        return parts.length + ' inspectable parts';
+      });
+
+      // Offline / service worker (best-effort, with timeout).
+      await assert('service worker caches core assets for offline', async () => {
+        if (!('serviceWorker' in navigator)) throw new Error('SW unsupported');
+        let reg;
+        try { reg = await Promise.race([navigator.serviceWorker.ready, sleep(4000).then(() => null)]); }
+        catch (e) { reg = null; }
+        if (!reg) throw new Error('SW not active within timeout');
+        const keys = await caches.keys();
+        if (!keys.includes('ame-v1')) throw new Error('ame-v1 cache missing: ' + keys.join(','));
+        const cache = await caches.open('ame-v1');
+        const hit = await cache.match('./index.html');
+        if (!hit) throw new Error('index.html not cached');
+        return 'ame-v1 cache present';
+      });
+
+      const passed = results.filter((r) => r.ok === true).length;
+      const failed = results.filter((r) => r.ok === false).length;
+      const skipped = results.filter((r) => r.ok === 'skip').length;
+      const banner = document.getElementById('banner');
+      banner.textContent = `${passed} passed, ${failed} failed, ${skipped} skipped`;
+      banner.className = 'banner ' + (failed ? 'fail' : 'pass');
+    }
+
+    main().catch((e) => {
+      const b = document.getElementById('banner');
+      b.textContent = 'Fatal: ' + (e && e.message ? e.message : e);
+      b.className = 'banner fail';
+    });
+  </script>
+</body>
+</html>

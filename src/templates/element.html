@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>{{TITLE}}</title>
+  <meta name="description" content="{{DESC}}" />
+  <meta name="theme-color" content="#1d4ed8" />
+  <meta name="color-scheme" content="light dark" />
+  <link rel="canonical" href="{{CANONICAL}}" />
+  <link rel="stylesheet" href="../css/styles.css" />
+  <script>
+    (function () { try {
+      var t = localStorage.getItem('ame-theme');
+      if (!t) t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', t);
+    } catch (e) {} })();
+  </script>
+  <script type="application/ld+json">{{JSONLD}}</script>
+</head>
+<body>
+  <header class="app-header">
+    <div class="brand"><h1><a href="../" style="color:inherit;text-decoration:none">Atomic Model Explorer</a></h1></div>
+    <a class="app-footer" style="text-decoration:none" href="../index.html#el={{SYM}}&m=bohr">⟵ Open interactive</a>
+  </header>
+
+  <main class="layout">
+    <section class="stage" aria-label="Simplified atom diagram for {{NAME}}">
+      <div class="canvas-wrap">{{SVG}}</div>
+      <p class="caption">Simplified Bohr-style schematic — not to scale. Open the interactive explorer for the Thomson, Rutherford and quantum-mechanical views.</p>
+    </section>
+
+    <aside class="info" aria-label="Facts about {{NAME}}">
+      <div class="el-card">
+        <div class="el-symbol" style="background:var(--chip-unknown)">{{SYM}}</div>
+        <div class="el-meta">
+          <h2>{{NAME}}</h2>
+          <p>Atomic number <span>{{Z}}</span></p>
+          <p>Standard atomic weight: <span>{{MASS}}</span></p>
+          <p>Electron configuration: <code>{{CONFIG}}</code></p>
+          <p>Electrons per shell: <span>{{SHELLS}}</span></p>
+          <p>{{ISOTOPE_LINE}}</p>
+        </div>
+      </div>
+
+      <article class="model-info">
+        <h2>How {{NAME}} is described by each model</h2>
+        {{MODEL_NOTES}}
+      </article>
+
+      <article class="model-info">
+        <h2>Explore interactively</h2>
+        <p>Open {{NAME}} in the live explorer with a specific model:</p>
+        <p>{{LINKS}}</p>
+      </article>
+    </aside>
+  </main>
+
+  <footer class="app-footer">
+    <p>Atomic Model Explorer — static, offline-capable educational pages. Visualizations are simplified schematics and are not to scale. <a href="../sitemap.xml">Sitemap</a></p>
+  </footer>
+</body>
+</html>

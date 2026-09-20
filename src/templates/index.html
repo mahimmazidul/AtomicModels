@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Atomic Model Explorer — Dalton, Thomson, Rutherford, Bohr &amp; Quantum</title>
+  <meta name="description" content="An interactive, offline-capable explorer of the five major atomic models — Dalton, Thomson, Rutherford, Bohr and the quantum-mechanical model — for all 118 elements. Scientifically labelled, simplified visualizations with electron configurations." />
+  <meta name="theme-color" content="#1d4ed8" />
+  <meta name="color-scheme" content="light dark" />
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="canonical" href="https://example.com/atomic-model-explorer/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Atomic Model Explorer" />
+  <meta property="og:description" content="Explore how our picture of the atom evolved, for all 118 elements — fully offline after first load." />
+  <script>
+    // Apply saved theme before first paint to avoid a flash of the wrong theme.
+    (function () {
+      try {
+        var t = localStorage.getItem('ame-theme');
+        if (!t) t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="stylesheet" href="./css/styles.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Atomic Model Explorer",
+    "applicationCategory": "EducationalApplication",
+    "operatingSystem": "Any",
+    "offlineAccess": true,
+    "description": "Interactive explorer of the five major historical and modern atomic models for all 118 elements, with simplified, scientifically labelled visualizations.",
+    "url": "https://example.com/atomic-model-explorer/"
+  }
+  </script>
+</head>
+<body>
+  <a class="sr-only" href="#main">Skip to content</a>
+  <header class="app-header">
+    <div class="brand">
+      <h1>Atomic Model Explorer</h1>
+      <small>v<!--APP_VERSION--></small>
+    </div>
+    <button id="theme-toggle" type="button" aria-label="Toggle light and dark theme">
+      <span aria-hidden="true">◐</span> <span class="theme-text">Theme</span>
+    </button>
+  </header>
+
+  <section class="controls" aria-label="Controls">
+    <div class="control">
+      <label for="element-search">Element</label>
+      <div class="search-row">
+        <input id="element-search" list="element-list" type="search" autocomplete="off"
+               placeholder="Search name, symbol or number"
+               aria-describedby="search-help" />
+        <datalist id="element-list"><!--ELEMENT_OPTIONS--></datalist>
+        <span id="search-help" class="sr-only">Type an element name, symbol, or atomic number and press Enter. Use the list to browse all 118 elements.</span>
+        <button id="element-random" type="button">Random</button>
+      </div>
+    </div>
+
+    <div class="control models" role="radiogroup" aria-label="Atomic model">
+      <span class="group-label sr-only">Atomic model</span>
+      <button class="model-btn" type="button" role="radio" data-model="dalton" aria-checked="false">Dalton</button>
+      <button class="model-btn" type="button" role="radio" data-model="thomson" aria-checked="false">Thomson</button>
+      <button class="model-btn" type="button" role="radio" data-model="rutherford" aria-checked="false">Rutherford</button>
+      <button class="model-btn" type="button" role="radio" data-model="bohr" aria-checked="false">Bohr</button>
+      <button class="model-btn" type="button" role="radio" data-model="quantum" aria-checked="false">Quantum</button>
+    </div>
+  </section>
+
+  <main id="main" class="layout">
+    <section class="stage" aria-label="Atom visualization">
+      <div class="canvas-wrap">
+        <canvas id="viz" role="img"
+                aria-label="Atomic model visualization"></canvas>
+        <div class="view-tools" role="group" aria-label="View controls">
+          <button id="zoom-in" type="button" aria-label="Zoom in">+</button>
+          <button id="zoom-out" type="button" aria-label="Zoom out">−</button>
+          <button id="zoom-reset" type="button" aria-label="Reset zoom and pan">Reset</button>
+          <button id="play-pause" type="button" aria-pressed="true" aria-label="Pause animation">
+            <span class="label">Pause</span>
+          </button>
+        </div>
+        <p class="sr-only" id="viz-desc"></p>
+      </div>
+      <p class="caption">Simplified educational diagram — not to scale. Tap, click, or focus a part to inspect it.</p>
+      <div class="parts" id="parts" hidden aria-label="Inspectable parts"></div>
+    </section>
+
+    <aside class="info" aria-label="Element and model information">
+      <div class="el-card">
+        <div class="el-symbol" id="el-symbol">C</div>
+        <div class="el-meta">
+          <h2 id="el-name">Carbon</h2>
+          <p>Atomic number <span id="el-number">6</span></p>
+          <p>Standard atomic weight: <span id="el-mass"></span></p>
+          <p>Electron configuration: <code id="el-config"></code></p>
+          <p>Electrons per shell: <span id="el-shells"></span></p>
+          <p id="el-isotope"></p>
+        </div>
+      </div>
+
+      <article class="model-info" aria-live="polite">
+        <h2 id="model-title"></h2>
+        <h3>Principle</h3><p id="model-principle"></p>
+        <h3>Significance</h3><p id="model-significance"></p>
+        <h3>Limitations</h3><p id="model-limitation"></p>
+        <h3>About this element</h3><p id="model-note"></p>
+      </article>
+
+      <div class="selection" id="selection-info" aria-live="polite">
+        <h3>Selection</h3>
+        <p id="selection-text">Tap, click, or focus a part of the model to learn what it represents.</p>
+      </div>
+    </aside>
+  </main>
+
+  <details style="padding: 0 1rem 1.5rem">
+    <summary style="cursor:pointer;color:var(--accent);font-weight:600">About the five atomic models (static, crawlable)</summary>
+    <div class="info" style="margin-top:1rem">
+      <article class="model-info">
+        <h2>Dalton — Solid Sphere (1803)</h2>
+        <p>Each element is made of tiny, indivisible, identical spheres. Mass distinguishes elements; they combine in fixed whole-number ratios.</p>
+        <h3>Limitations</h3>
+        <p>Atoms contain protons, neutrons and electrons, and occur as isotopes; the solid sphere cannot explain spectra, bonding, or radioactivity.</p>
+      </article>
+      <article class="model-info">
+        <h2>Thomson — Plum Pudding (1904)</h2>
+        <p>A positively charged sphere with electrons embedded throughout, like plums in a pudding, neutral overall.</p>
+        <h3>Limitations</h3>
+        <p>Cannot explain large-angle alpha scattering or discrete line spectra.</p>
+      </article>
+      <article class="model-info">
+        <h2>Rutherford — Nuclear (1911)</h2>
+        <p>Atoms are mostly empty space with a tiny, dense, positive nucleus; electrons orbit at a distance.</p>
+        <h3>Limitations</h3>
+        <p>A classical orbiting electron should radiate and collapse; the model cannot explain discrete spectra.</p>
+      </article>
+      <article class="model-info">
+        <h2>Bohr — Quantised Orbits (1913)</h2>
+        <p>Electrons occupy fixed circular orbits with quantised energies, grouped into shells (n = 1, 2, 3…). Exact for hydrogen.</p>
+        <h3>Limitations</h3>
+        <p>Only accurate for one-electron atoms; many-electron atoms need quantum mechanics, not fixed circles.</p>
+      </article>
+      <article class="model-info">
+        <h2>Quantum — Probability Clouds (1926)</h2>
+        <p>Electrons are described by wave functions whose square gives a probability density — orbitals (s, p, d, f), not fixed paths.</p>
+        <h3>Limitations</h3>
+        <p>Exact solutions exist only for hydrogen-like atoms; many-electron atoms require approximation methods.</p>
+      </article>
+    </div>
+  </details>
+
+  <footer class="app-footer">
+    <p>Atomic Model Explorer — a static, offline-capable educational tool. Visualizations are simplified schematics and are not to scale. No tracking, no external requests.</p>
+    <p>Data: IUPAC standard atomic weights and ground-state electron configurations. Built with semantic HTML, Canvas 2D, and vanilla JavaScript. <a href="./sitemap.xml">Sitemap</a> · <a href="./robots.txt">Robots</a></p>
+  </footer>
+
+  <noscript>
+    <p style="padding:1rem">This interactive explorer requires JavaScript for the canvas visualizations. All 118 elements and the five atomic models are described in the static pages linked from the <a href="./sitemap.xml">sitemap</a>.</p>
+  </noscript>
+
+  <script type="module" src="./js/app.js"></script>
+</body>
+</html>

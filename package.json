@@ -1,0 +1,15 @@
+{
+  "name": "atomic-model-explorer",
+  "version": "1.0.0",
+  "description": "Interactive, offline-capable browser explorer of the five major atomic models for all 118 elements.",
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs",
+    "test": "node --test tests/",
+    "serve": "node serve.mjs",
+    "docs": "node build.mjs --out docs"
+  },
+  "keywords": ["atomic", "chemistry", "education", "canvas", "offline", "pwa"],
+  "license": "MIT",
+  "engines": { "node": ">=18" }
+}
