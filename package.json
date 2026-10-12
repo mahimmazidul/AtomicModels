@@ -1,16 +1,50 @@
 {
-  "name": "atomic-model-explorer",
-  "version": "1.0.0",
-  "description": "Interactive, offline-capable browser explorer of the five major atomic models for all 118 elements.",
+  "name": "atomic-models",
+  "private": true,
+  "version": "2.0.0",
   "type": "module",
-  "scripts": {
-    "build": "node build.mjs",
-    "test": "node --test tests/",
-    "serve": "node serve.mjs",
-    "docs": "node build.mjs --out docs"
-  },
-  "keywords": ["atomic", "chemistry", "education", "canvas", "offline", "pwa"],
+  "description": "An instrument for the indivisible: five major atomic models — Dalton, Thomson, Rutherford, Bohr and the quantum cloud — drawn per element across all 118 elements, with historical plates and a chronology of 1803–1926.",
+  "keywords": [
+    "atomic-models",
+    "dalton",
+    "thomson",
+    "rutherford",
+    "bohr",
+    "quantum-cloud",
+    "chemistry",
+    "periodic-table",
+    "education",
+    "visualization"
+  ],
   "author": "Mahim Mazidul (@mahimmazidul)",
   "license": "MIT",
-  "engines": { "node": ">=18" }
+  "homepage": "https://mahimmazidul.github.io/AtomicModels/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mahimmazidul/AtomicModels.git"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "engines": { "node": ">=20" },
+  "dependencies": {
+    "clsx": "2.1.1",
+    "lucide-react": "^1.55.0",
+    "react": "19.2.6",
+    "react-dom": "19.2.6",
+    "tailwind-merge": "3.4.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "4.1.17",
+    "@types/node": "22.19.17",
+    "@types/react": "19.2.7",
+    "@types/react-dom": "19.2.3",
+    "@vitejs/plugin-react": "5.1.1",
+    "tailwindcss": "4.1.17",
+    "typescript": "5.9.3",
+    "vite": "7.3.2",
+    "vite-plugin-singlefile": "2.3.0"
+  }
 }

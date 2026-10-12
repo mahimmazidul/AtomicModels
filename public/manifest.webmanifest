@@ -1,0 +1,16 @@
+{
+  "name": "Atomic Models — An Instrument for the Indivisible",
+  "short_name": "Atomic Models",
+  "description": "Five honest drawings of the atom — Dalton, Thomson, Rutherford, Bohr and the quantum cloud — operated across all 118 elements.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0c0c0f",
+  "theme_color": "#0c0c0f",
+  "icons": [
+    { "src": "./assets/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "./assets/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" },
+    { "src": "./assets/apple-touch-icon.png", "sizes": "180x180", "type": "image/png", "purpose": "any" },
+    { "src": "./assets/favicon-32.png", "sizes": "32x32", "type": "image/png", "purpose": "any" }
+  ]
+}
