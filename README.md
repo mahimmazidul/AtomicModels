@@ -1,164 +1,145 @@
-# Atomic Model Explorer
+# Atomic Models — An Instrument for the Indivisible
 
-An interactive, offline-capable browser app for exploring the five major atomic
-models — **Dalton, Thomson, Rutherford, Bohr, and the quantum-mechanical model**
-— across all **118 elements**.
+Five honest drawings of the atom — **Dalton's solid sphere (1803)**,
+**Thomson's plum pudding (1904)**, **Rutherford's nucleus (1911)**,
+**Bohr's quantised orbits (1913)** and **the quantum probability cloud (1926)**
+— operated across all **118 elements**.
 
-- **Live demo:** https://mahimmazidul.github.io/AtomicModels/
+- **Live instrument:** https://mahimmazidul.github.io/AtomicModels/
 - **Issues:** https://github.com/mahimmazidul/AtomicModels/issues
+- **Notes on this revision:** [REDESIGN_NOTES.md](./REDESIGN_NOTES.md)
 
-**Status:** production-ready · zero runtime dependencies · essential payload ~26 KB
-gzipped · works offline after first load.
+**Status:** revision II ("Instrument & Archive") · the whole site ships as one
+self-contained HTML document · no runtime APIs, no analytics, no cookies.
 
 ---
 
 ## Why this exists
 
-Atomic models are foundational to chemistry and physics, but most interactive
-explainers either over-simplify (implying electrons really orbit like planets) or
-over-complicate. This tool stays honest: every visualization is a **simplified,
-not-to-scale schematic**, and wherever a model cannot accurately describe an
-element, the UI says so instead of faking a precise simulation.
+The atom was never seen, only drawn. Most explainers quietly blur the line
+between the drawing and the thing drawn — a Bohr orbit rendered as if it were
+what an electron does. This instrument keeps a line between them: every figure
+says which model it is, what it leaves out, and which experiment killed it.
 
-## Features
+## What it is
 
-- **Five models** with concise, accessible explanations of principles, historical
-  significance, and limitations.
-- **Searchable element selector** for all 118 elements (by name, symbol, or
-  atomic number). Neutral atoms by default.
-- **Per-element facts:** atomic number, symbol, name, IUPAC standard atomic
-  weight, electron configuration, and electrons per shell.
-- **Procedural Canvas 2D visualizations** — solid sphere, plum pudding, nuclear,
-  Bohr quantised orbits, and schematic quantum probability clouds — each clearly
-  labelled as simplified.
-- **Explicit isotopes:** when a neutron count is shown, a real, named isotope is
-  chosen (e.g. ¹²C). The standard atomic weight is never rounded to derive
-  neutrons.
-- **Responsive & mobile-first** down to 320 px; works in landscape, tablet, and
-  desktop with no horizontal scrolling.
-- **Pointer Events** (mouse / touch / pen) with accurate hit testing, a small
-  contextual pointer indicator, visible hover/focus, and zoom/pan with button
-  alternatives.
-- **Accessible:** keyboard-operable controls, a `role="radiogroup"` model switch,
-  visible focus states, crawlable educational text, `aria-live` selection info,
-  reduced-motion support, and light/dark themes.
-- **Offline:** a versioned service worker caches the app after first load. No
-  runtime APIs, no third-party scripts, no tracking.
+A single scrolling instrument rather than a dashboard:
+
+| Section | What it does |
+| --- | --- |
+| Hero | The premise, the spectral motif (hydrogen's Balmer lines, H-α 656.3 → H-δ 410.2 nm), and the two rules of the site. |
+| Ticker | All 118 elements in one ruled strip — click any specimen to load it. |
+| Instrument | The working stage: specimen readout, five model tabs (I–V), a bracketed canvas with crosshair, and a paper ledger of the element's properties. |
+| Plates | Five historical plates from Wikimedia Commons — Dalton's 1808 plate, the plum-pudding diagram, the Geiger–Marsden expectation-versus-result figure, Bohr's 1913 atom, and hydrogen density plots — each matted with author and licence. |
+| Chronicle | The 123-year ledger, 1803–1926, pairing each model with the experiment that forced it and the one that finished it. |
+| Honesty | The policy stated plainly: label every schematic, ship each model with its refutation, never round reality. |
+
+## Operating the instrument
+
+- **Search** by name, symbol or atomic number, or click a cell in the ticker.
+- **Keyboard:** `←` / `→` step one element, `1`–`5` switch model, `R` loads a random specimen.
+- **Model tabs I–V** redraw the same element as Dalton, Thomson, Rutherford, Bohr or quantum cloud.
+- Each drawing **annotates its own limits** in place — for example how many electrons are actually drawn out of the shell total, or that the cloud is schematic rather than a computed orbital.
+- **Responsive** from 320 px upward; pointer, touch and keyboard all work; `prefers-reduced-motion` disables the animated paths.
 
 ## Scientific honesty
 
-- **Bohr shells** (n = 1, 2, 3 …) are clearly distinguished from real **quantum
-  orbitals** (s, p, d, f). Electrons on classical circular paths appear only for
-  the historical Bohr/Rutherford models, with explicit notes that this is a
-  teaching simplification — not the modern description.
-- **Quantum clouds** are schematic translucent shapes, not calculated orbital
-  probability distributions. The UI states that many-electron atoms require
-  numerical quantum-chemistry methods.
-- **Electron configurations** use the ground-state arrangement, including the
-  well-known anomalous configurations (Cr, Cu, Nb, Mo, Ru, Rh, Pd, Ag, La, Ce,
-  Gd, Pt, Au, Ac, Th, Pa, U, Np, Cm, Lr).
-- Data shown for a "representative isotope" is explicitly identified; neutron
-  counts are `mass number − atomic number` for that named isotope only.
+- **Bohr shells (n = 1, 2, 3 …)** are not the same thing as **quantum orbitals (s, p, d, f)**, and the interface never conflates them. Classical circular paths appear only under the historical Rutherford and Bohr models, with a note that they are teaching simplifications.
+- **Quantum clouds** are drawn as schematic translucent shapes, not calculated probability densities. Multi-electron atoms would need numerical quantum-chemistry methods, and the page says so.
+- **Electron populations** use ground-state shell distributions, including the well-known anomalous configurations (Cr, Cu, Nb, Mo, Ru, Rh, Pd, Ag, La, Ce, Gd, Pt, Au, Ac, Th, Pa, U, Np, Cm, Lr).
+- **Every figure is a schematic.** Counts are annotated; nothing is drawn to scale; nothing is rounded to look more precise than the data.
 
 ## Tech stack
 
-- Semantic HTML, CSS custom properties, and **vanilla JavaScript (ES modules)**.
-- **Canvas 2D** for all visualizations; no frameworks, no 3D engines, no external
-  assets, no CDN.
-- A **versioned service worker** for offline use; system fonts only.
-- **Static-first build** that pre-renders an index page plus 118 element pages
-  and 5 model pages for SEO.
+- **React 19** + **TypeScript**, **Vite 7**, **Tailwind CSS 4** (`@tailwindcss/vite`), `lucide-react` for interface icons, custom SVG marks for the five models.
+- **`vite-plugin-singlefile`** inlines every script and stylesheet, so `npm run build` emits one `dist/index.html` that can be dropped anywhere.
+- **Fraunces** and **IBM Plex Mono** via Google Fonts; the five historical plates are hot-linked from Wikimedia Commons with their credits and licences shown beneath each frame.
+- **Service worker** (`public/sw.js`) for offline use: network-first navigations, cache-first same-origin assets, and a bounded runtime cache for fonts and plates.
+- No state library, no CSS-in-JS, no analytics, no third-party scripts.
 
 ## Quick start
 
 ```bash
 git clone https://github.com/mahimmazidul/AtomicModels.git
 cd AtomicModels
-node build.mjs            # -> produces dist/
-node serve.mjs 8080       # serve dist/ at http://localhost:8080
+npm install
+npm run dev        # http://localhost:5173
+npm run build      # -> dist/index.html (single file)
+npm run preview    # serve the built file
 ```
-
-Open `http://localhost:8080/` for the app, and
-`http://localhost:8080/browser-tests.html` for the in-browser test suite.
 
 ## Scripts
 
 | Command | Description |
 | --- | --- |
-| `node build.mjs` | Build the static site into `dist/` (pre-renders element/model pages, sitemap, robots, manifest). |
-| `node build.mjs --base-url "https://you.github.io/repo/"` | Set absolute URLs for canonical/sitemap. |
-| `node build.mjs --out docs` | Emit to `docs/` instead of `dist/`. |
-| `node serve.mjs [port]` | Zero-dependency local dev server. |
-| `node --test tests/` | Data-integrity, chemistry, model-logic, and bundle-size tests. |
+| `npm run dev` | Vite dev server with hot reload. |
+| `npm run build` | Production build; inlines everything into `dist/index.html`. |
+| `npm run preview` | Serve `dist/` locally to check the real output. |
 
 ## Project structure
 
 ```
 AtomicModels/
-├── build.mjs                  # zero-dependency build + page generator + size report
-├── serve.mjs                  # zero-dependency local server
+├── index.html                 # shell: fonts, meta, Open Graph, JSON-LD, noscript summary
+├── public/
+│   ├── assets/                # favicon 32, apple-touch-icon 180, icon 192 and 512
+│   ├── manifest.webmanifest   # installable web app metadata
+│   ├── robots.txt             # crawl policy + sitemap pointer
+│   ├── sitemap.xml
+│   └── sw.js                  # offline service worker
 ├── src/
-│   ├── data/                  # elements.js (118 entries) + chemistry.js (pure helpers)
-│   ├── js/                    # app.js, viz.js, models.js, sw-register.js
-│   ├── css/styles.css         # responsive, themed, accessible stylesheet
-│   ├── sw.js                  # versioned offline service worker
-│   ├── templates/             # index.html, element.html, model.html
-│   └── tests/browser.test.html
-├── tests/                     # Node tests (data, chemistry, size)
-└── dist/                      # build output (this is what gets deployed)
+│   ├── App.tsx                # header, section order, shared element/model state
+│   ├── index.css              # design tokens: ink, paper, fog, spectral Balmer palette
+│   ├── components/
+│   │   ├── Hero.tsx           # premise + spectral rule
+│   │   ├── Ticker.tsx         # 118-element strip
+│   │   ├── Instrument.tsx     # stage, model tabs I–V, ledger readout, keyboard
+│   │   ├── AtomViz.tsx        # the five drawings, generated from shell data
+│   │   ├── Plates.tsx         # Commons plates with credits and licences
+│   │   ├── Chronicle.tsx      # 1803–1926 ledger
+│   │   ├── Honesty.tsx        # editorial policy
+│   │   ├── Spectrum.tsx       # Balmer line strip
+│   │   ├── Reveal.tsx         # reduced-motion-aware section reveal
+│   │   ├── icons.tsx          # instrument mark and model marks
+│   │   └── Footer.tsx         # colophon, sources, back to top
+│   ├── data/
+│   │   ├── elements.ts        # 118 elements: weight, shells, category, period, group
+│   │   └── models.ts          # the five models + plate credits
+│   ├── lib/prng.ts            # deterministic scatter so drawings are stable
+│   └── utils/cn.ts            # class merge helper
+└── .github/workflows/pages.yml  # build + deploy to GitHub Pages
 ```
 
 ## Deployment (GitHub Pages)
 
-The repository includes a GitHub Actions workflow that builds `dist/` and deploys
-it to GitHub Pages. To activate:
+The site is served from the **repository root** of GitHub Pages, so the Pages
+source must be **GitHub Actions**:
 
-1. Go to **Settings → Pages → Build and deployment → Source → "GitHub Actions"**
-   and save.
-2. Re-run the latest workflow (Actions tab) so it deploys.
+1. **Settings → Pages → Build and deployment → Source → GitHub Actions.**
+2. Push to `main` (or run the workflow manually from the Actions tab).
+3. `.github/workflows/pages.yml` installs dependencies, runs `npm run build` and
+   deploys `dist/`.
 
-Alternatively, build into `docs/` (`node build.mjs --out docs`), commit it, and set
-Pages source to the `docs` branch/folder.
+Because the build inlines its own JavaScript and CSS, no `base` path juggling is
+needed — the same artifact works at a project subpath such as `/AtomicModels/`
+or at a custom domain.
 
-## Data sources & limitations
+## Data and sources
 
-- **Element data:** IUPAC standard atomic weights and standard ground-state
-  electron configurations. Synthetic elements show the most-studied/longest-lived
-  isotope mass in `[brackets]`.
-- **Visualizations are educational schematics**, not to scale, and not physical
+- **Element data:** standard atomic weights, ground-state electron configurations
+  and electron-per-shell distributions for all 118 elements, as commonly tabulated
+  by IUPAC and reference chemistry sources.
+- **Historical plates:** Wikimedia Commons, via `Special:FilePath`, with the
+  author, source and licence printed beneath every frame in the Plates section.
+- **Visualizations are educational schematics** — not to scale, and not physical
   simulations of quantum behaviour.
-- **Pre-rendered pages** are "optional cached content"; only the interactive app
-  payload counts against the 200 KB budget.
-- **Browser support:** modern evergreen browsers (Chrome, Edge, Firefox, Safari 16+)
-  with ES modules, Canvas 2D, Pointer Events, `IntersectionObserver`,
-  `ResizeObserver`, and Service Workers for offline use.
-- **Measured performance:** essential payload gzips to ~26 KB; single-canvas
-  rendering with capped DPR and no per-frame allocation in the static models.
-  Runtime FPS should be verified with Lighthouse/DevTools in the target browser —
-  the Bohr animation is the only continuously rendering path and pauses when
-  offscreen or hidden.
-
-## Testing
-
-```bash
-node --test tests/
-```
-
-The browser test harness (`browser-tests.html`) exercises model switching,
-keyboard operation, pointer/touch hit-testing, responsive layout, theme toggle,
-and service-worker offline caching. Run it over the local server (service workers
-require a secure context; `localhost` qualifies).
 
 ## Accessibility
 
-Keyboard-operable controls, visible focus states, sufficient contrast, appropriate
-labels, and text alternatives for visualizations. Animation is paused for
-`prefers-reduced-motion`. The goal is WCAG 2.2 AA.
-
-## Contributing
-
-Issues and pull requests are welcome. Keep changes dependency-free and verify with
-`node --test tests/`.
+Keyboard-operable controls with visible focus, semantic headings and lists,
+labelled figures, an honest text summary in the `noscript` block, sufficient
+contrast on the ink-and-paper palette, and full `prefers-reduced-motion` support.
+The target is WCAG 2.2 AA.
 
 ## Author
 
