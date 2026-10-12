@@ -10,7 +10,7 @@
   --color-paper: #e9e4d6;
   --color-bone: #f5f2e8;
   --color-fog: rgba(233, 228, 214, 0.55);
-  --color-halpha: #e5483c;
+  --color-halpha: #ef6a5c;
   --color-hbeta: #35bdd0;
   --color-hgamma: #5a66e0;
   --color-hdelta: #9462e8;
@@ -32,7 +32,45 @@
   --line-strong: rgba(233, 228, 214, 0.32);
   --line-ink: rgba(12, 12, 15, 0.18);
   --line-ink-strong: rgba(12, 12, 15, 0.42);
+  --focus: rgba(233, 228, 214, 0.7);
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  color-scheme: dark;
+}
+
+/* ————— light setting —————
+   Ink and paper trade places: the page becomes paper, the marks become ink.
+   Anything inverted in the dark set (the mounted slabs, the ledger, the
+   active model tab) stays inverted, so contrast survives the switch. */
+
+html[data-theme="light"] {
+  color-scheme: light;
+
+  --color-ink: #efeade;
+  --color-ink-2: #e6e0d1;
+  --color-ink-3: #dbd4c2;
+  --color-paper: #14140f;
+  --color-bone: #12120e;
+  --color-fog: rgba(20, 20, 15, 0.6);
+
+  --color-halpha: #a92c22;
+  --color-hbeta: #0e6b7a;
+  --color-hgamma: #3a48bd;
+  --color-hdelta: #6a3fc0;
+
+  --color-cat-nonmetal: #2f8f45;
+  --color-cat-halogen: #1a8ea3;
+  --color-cat-noble: #6f43c9;
+  --color-cat-alkali: #c8362a;
+  --color-cat-alkaline: #b9620f;
+  --color-cat-transition: #8a7a12;
+  --color-cat-post: #6f6a5e;
+  --color-cat-metalloid: #2f7a63;
+  --color-cat-lanthanide: #a8447a;
+  --color-cat-actinide: #a53f3f;
+
+  --line: rgba(20, 20, 15, 0.16);
+  --line-strong: rgba(20, 20, 15, 0.4);
+  --focus: rgba(20, 20, 15, 0.7);
 }
 
 html {
@@ -61,14 +99,36 @@ body {
   background: var(--color-ink);
 }
 ::-webkit-scrollbar-thumb {
-  background: #2a2a32;
+  background: color-mix(in oklab, var(--color-paper) 22%, transparent);
   border: 3px solid var(--color-ink);
   border-radius: 8px;
 }
 
 :focus-visible {
-  outline: 1px dashed rgba(233, 228, 214, 0.7);
+  outline: 1px dashed var(--focus);
   outline-offset: 4px;
+}
+
+/* ————— fixed ink for paper mats —————
+   The plate and specimen mats are real paper in both settings, so the ink on
+   them must stay dark even when the rest of the page flips to paper. */
+
+.mat-ink-90 { color: rgba(12, 12, 15, 0.92); }
+.mat-ink-85 { color: rgba(12, 12, 15, 0.88); }
+.mat-ink-70 { color: rgba(12, 12, 15, 0.76); }
+.mat-ink-55 { color: rgba(12, 12, 15, 0.66); }
+.mat-ink-50 { color: rgba(12, 12, 15, 0.64); }
+.mat-line { border-color: rgba(12, 12, 15, 0.16); }
+.mat-line-25 { border-color: rgba(12, 12, 15, 0.25); }
+.mat-rule { border-top: 1px dashed rgba(12, 12, 15, 0.25); }
+
+/* Accents on an inverted slab: mix the spectral colour toward the slab's own
+   ink so the label stays legible whether the slab is paper or ink. */
+.slab-accent {
+  color: color-mix(in oklab, var(--color-halpha) 62%, var(--color-ink));
+}
+.slab-accent-cool {
+  color: color-mix(in oklab, var(--color-hgamma) 62%, var(--color-ink));
 }
 
 /* ————— typographic / chrome helpers ————— */
@@ -81,7 +141,7 @@ body {
   color: var(--color-fog);
 }
 .kicker-ink {
-  color: rgba(12, 12, 15, 0.5);
+  color: color-mix(in oklab, var(--color-ink) 55%, transparent);
 }
 
 .hairline-b {
@@ -150,6 +210,10 @@ body {
 }
 
 /* ————— grain ————— */
+
+html[data-theme="light"] .grain {
+  opacity: 0.04;
+}
 
 .grain {
   position: fixed;

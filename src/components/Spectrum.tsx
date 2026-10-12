@@ -38,7 +38,10 @@ export default function Spectrum({
               className="absolute flex translate-x-[-50%] flex-col items-center gap-0.5"
               style={{ left: `${pct(l.nm)}%` }}
             >
-              <span className="font-mono text-[10px] tracking-[0.18em]" style={{ color: l.color }}>
+              <span
+                className="font-mono text-[10px] tracking-[0.18em]"
+                style={{ color: `color-mix(in oklab, ${l.color} 62%, var(--color-paper))` }}
+              >
                 {l.greek}
               </span>
               <span className="font-mono text-[9px] text-fog tracking-[0.12em]">{l.label} nm</span>

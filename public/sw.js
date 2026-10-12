@@ -4,7 +4,7 @@
    cache for the Google Fonts stylesheet and the Wikimedia Commons plates.
    Bump CACHE_VERSION whenever the build changes its asset URLs. */
 
-const CACHE_VERSION = "atomic-models-v2.0.0";
+const CACHE_VERSION = "atomic-models-v2.1.0";
 const RUNTIME = `${CACHE_VERSION}-runtime`;
 const PRECACHE = [
   "./",

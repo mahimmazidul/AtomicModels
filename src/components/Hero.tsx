@@ -2,10 +2,12 @@ import { useState } from "react";
 import { ArrowDown } from "lucide-react";
 import Spectrum from "./Spectrum";
 import Reveal from "./Reveal";
+import { useVizColors } from "../lib/theme";
 
 /* ————— decorative instrument: concentric reticle + counter-rotating orbits ————— */
 
 function Orrery() {
+  const V = useVizColors();
   const ticks = Array.from({ length: 48 }, (_, i) => (i / 48) * Math.PI * 2);
   return (
     <svg viewBox="0 0 560 560" className="h-auto w-full" aria-hidden>
@@ -16,16 +18,17 @@ function Orrery() {
           y1={280 + 252 * Math.sin(a)}
           x2={280 + (i % 4 === 0 ? 238 : 246) * Math.cos(a)}
           y2={280 + (i % 4 === 0 ? 238 : 246) * Math.sin(a)}
-          stroke="rgba(233,228,214,0.35)"
+          stroke={V.line}
+          strokeOpacity={0.35}
           strokeWidth={i % 4 === 0 ? 1.2 : 0.7}
         />
       ))}
-      <circle cx={280} cy={280} r={266} fill="none" stroke="rgba(233,228,214,0.16)" strokeDasharray="2 7" />
+      <circle cx={280} cy={280} r={266} fill="none" stroke={V.line} strokeOpacity={0.16} strokeDasharray="2 7" />
       {[84, 128, 172, 216].map((r) => (
-        <circle key={r} cx={280} cy={280} r={r} fill="none" stroke="rgba(233,228,214,0.13)" />
+        <circle key={r} cx={280} cy={280} r={r} fill="none" stroke={V.line} strokeOpacity={0.13} />
       ))}
-      <line x1={280} x2={280} y1={16} y2={544} stroke="rgba(233,228,214,0.09)" />
-      <line x1={16} x2={544} y1={280} y2={280} stroke="rgba(233,228,214,0.09)" />
+      <line x1={280} x2={280} y1={16} y2={544} stroke={V.line} strokeOpacity={0.09} />
+      <line x1={16} x2={544} y1={280} y2={280} stroke={V.line} strokeOpacity={0.09} />
 
       {/* orbit A */}
       <g
@@ -56,8 +59,8 @@ function Orrery() {
         style={{ ["--d" as never]: "54s", transformBox: "view-box", transformOrigin: "50% 50%" }}
       >
         <g transform="rotate(4 280 280)">
-          <ellipse cx={280} cy={280} rx={128} ry={128} fill="none" stroke="rgba(233,228,214,0.22)" strokeWidth={1} />
-          <circle cx={280} cy={152} r={4.6} fill="#e9e4d6" />
+          <ellipse cx={280} cy={280} rx={128} ry={128} fill="none" stroke={V.line} strokeOpacity={0.22} strokeWidth={1} />
+          <circle cx={280} cy={152} r={4.6} fill={V.line} />
         </g>
       </g>
 
@@ -70,7 +73,8 @@ function Orrery() {
         y={60}
         textAnchor="middle"
         fontSize={10}
-        fill="rgba(233,228,214,0.45)"
+        fill={V.line}
+        fillOpacity={0.45}
         style={{ fontFamily: "IBM Plex Mono, monospace", letterSpacing: "0.3em" }}
       >
         FIG. 0 — THE IDEA OF AN ATOM

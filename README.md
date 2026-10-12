@@ -32,15 +32,35 @@ A single scrolling instrument rather than a dashboard:
 | Instrument | The working stage: specimen readout, five model tabs (I–V), a bracketed canvas with crosshair, and a paper ledger of the element's properties. |
 | Plates | Five historical plates from Wikimedia Commons — Dalton's 1808 plate, the plum-pudding diagram, the Geiger–Marsden expectation-versus-result figure, Bohr's 1913 atom, and hydrogen density plots — each matted with author and licence. |
 | Chronicle | The 123-year ledger, 1803–1926, pairing each model with the experiment that forced it and the one that finished it. |
+| Specimen | The object itself, from the element's Wikipedia article by way of Wikimedia Commons — photographed, credited, and captioned with the article's intro extract. |
 | Honesty | The policy stated plainly: label every schematic, ship each model with its refutation, never round reality. |
 
 ## Operating the instrument
 
 - **Search** by name, symbol or atomic number, or click a cell in the ticker.
-- **Keyboard:** `←` / `→` step one element, `1`–`5` switch model, `R` loads a random specimen.
+- **Keyboard:** `←` / `→` step one element, `1`–`5` switch model, `R` loads a random specimen, `T` swaps the setting.
+- **Setting:** the toggle in the header switches between the dark and light readings of the same instrument — ink on paper, or paper on ink. The choice is remembered, and with no stored choice the system preference decides.
 - **Model tabs I–V** redraw the same element as Dalton, Thomson, Rutherford, Bohr or quantum cloud.
 - Each drawing **annotates its own limits** in place — for example how many electrons are actually drawn out of the shell total, or that the cloud is schematic rather than a computed orbital.
 - **Responsive** from 320 px upward; pointer, touch and keyboard all work; `prefers-reduced-motion` disables the animated paths.
+
+## Specimen photographs
+
+Every drawing here is a labelled schematic, so the photograph matters: it is the
+one thing on the stage nobody drew. Each element's lead image comes from its
+English Wikipedia article, by way of Wikimedia Commons, at reference size
+(~1000–1280 px) and hot-linked from `upload.wikimedia.org`; the author and licence
+are printed beneath the frame, and the caption carries the article's plain-text
+intro extract about two sentences long.
+
+- **94 of 118 elements** have a lead photograph (through Californium). The
+  remaining 24 — Einsteinium and everything heavier, plus technetium, hafnium,
+  radon and francium — have no Commons lead image; those show an explicit
+  *no photograph on file* mat rather than substituting a drawing.
+- The data is compiled at build time by `node scripts/fetch-specimens.mjs`, which
+  writes `src/data/specimens.ts`. The app never calls an API at runtime.
+- Every entry keeps `file`, `page` (the file page with its full licence text) and
+  `wiki` (the article), so the credit is one click from the claim.
 
 ## Scientific honesty
 
@@ -75,6 +95,7 @@ npm run preview    # serve the built file
 | `npm run dev` | Vite dev server with hot reload. |
 | `npm run build` | Production build; inlines everything into `dist/index.html`. |
 | `npm run preview` | Serve `dist/` locally to check the real output. |
+| `node scripts/fetch-specimens.mjs` | Refresh photograph URLs, credits and extracts from Wikipedia/Commons. |
 
 ## Project structure
 
@@ -87,13 +108,17 @@ AtomicModels/
 │   ├── robots.txt             # crawl policy + sitemap pointer
 │   ├── sitemap.xml
 │   └── sw.js                  # offline service worker
+├── scripts/
+│   └── fetch-specimens.mjs    # build-time Commons/Wikipedia data refresh (writes src/data/specimens.ts)
 ├── src/
-│   ├── App.tsx                # header, section order, shared element/model state
-│   ├── index.css              # design tokens: ink, paper, fog, spectral Balmer palette
+│   ├── App.tsx                # header, setting toggle, section order, shared element/model state
+│   ├── index.css              # design tokens: ink and paper, both settings, spectral Balmer palette
 │   ├── components/
 │   │   ├── Hero.tsx           # premise + spectral rule
 │   │   ├── Ticker.tsx         # 118-element strip
-│   │   ├── Instrument.tsx     # stage, model tabs I–V, ledger readout, keyboard
+│   │   ├── Instrument.tsx     # stage, model tabs I–V, ledger readout, specimen card, keyboard
+│   │   ├── Specimen.tsx       # the photographed object, credited, with its article extract
+│   │   ├── ThemeToggle.tsx    # dark / light reading of the instrument
 │   │   ├── AtomViz.tsx        # the five drawings, generated from shell data
 │   │   ├── Plates.tsx         # Commons plates with credits and licences
 │   │   ├── Chronicle.tsx      # 1803–1926 ledger
@@ -104,8 +129,11 @@ AtomicModels/
 │   │   └── Footer.tsx         # colophon, sources, back to top
 │   ├── data/
 │   │   ├── elements.ts        # 118 elements: weight, shells, category, period, group
-│   │   └── models.ts          # the five models + plate credits
-│   ├── lib/prng.ts            # deterministic scatter so drawings are stable
+│   │   ├── models.ts          # the five models + plate credits
+│   │   └── specimens.ts       # generated: photographs, credits, extracts for all 118
+│   ├── lib/
+│   │   ├── prng.ts            # deterministic scatter so drawings are stable
+│   │   └── theme.ts           # dark / light state, persisted, with system-preference fallback
 │   └── utils/cn.ts            # class merge helper
 └── .github/workflows/pages.yml  # build + deploy to GitHub Pages
 ```

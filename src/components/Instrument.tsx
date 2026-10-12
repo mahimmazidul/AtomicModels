@@ -3,6 +3,7 @@ import { ChevronLeft, ChevronRight, Search, Shuffle } from "lucide-react";
 import { CAT_LABEL, ELEMENTS, byZ, padZ } from "../data/elements";
 import { MODELS, MODEL_BY_KEY, type ModelKey } from "../data/models";
 import AtomViz from "./AtomViz";
+import Specimen from "./Specimen";
 import Reveal from "./Reveal";
 import {
   IconBohr,
@@ -175,6 +176,11 @@ export default function Instrument({ z, setZ, model, setModel }: Props) {
             </span>
           </div>
 
+          {/* the object itself, from Wikipedia by way of Commons */}
+          <div className="mt-8">
+            <Specimen el={el} />
+          </div>
+
           {/* controls */}
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <div className="flex border border-[var(--line)]">
@@ -285,7 +291,7 @@ export default function Instrument({ z, setZ, model, setModel }: Props) {
 
           <div className="mt-6 border-t border-ink/25 pt-4">
             <div className="flex items-baseline gap-3">
-              <span className="font-mono text-[10px] tracking-[0.28em] text-halpha">FIG. {m.numeral}</span>
+              <span className="slab-accent font-mono text-[10px] tracking-[0.28em]">FIG. {m.numeral}</span>
               <span className="font-display text-[15px] font-medium">
                 {m.name}, {m.year}
               </span>
