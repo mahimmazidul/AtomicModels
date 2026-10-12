@@ -42,7 +42,7 @@ export const MODELS: AtomicModel[] = [
     gained: "Explains conservation of mass and the law of definite proportions — chemistry becomes quantitative.",
     limit: "No internal structure at all — it cannot hear a spectrum, and it never saw the electron coming.",
     plate: {
-      src: commons("A New System of Chemical Philosophy fp.jpg", 900),
+      src: commons("A New System of Chemical Philosophy fp.jpg", 480),
       href: commonsPage("A New System of Chemical Philosophy fp.jpg"),
       credit: "J. Dalton, plate from “A New System of Chemical Philosophy”, 1808",
       license: "Public domain",
@@ -62,7 +62,7 @@ export const MODELS: AtomicModel[] = [
     gained: "Puts the electron — discovered in his own cathode-ray tube, 1897 — inside the atom for the first time.",
     limit: "No nucleus, and therefore no explanation for why alpha particles ricochet off gold foil.",
     plate: {
-      src: commons("Plum pudding atom.svg", 800),
+      src: commons("Plum pudding atom.svg", 480),
       href: commonsPage("Plum pudding atom.svg"),
       credit: "Fastfission, “Plum pudding atom”",
       license: "Public domain",
@@ -82,7 +82,7 @@ export const MODELS: AtomicModel[] = [
     gained: "Reads the Geiger–Marsden gold-foil data correctly: one alpha in twenty thousand turns around.",
     limit: "Classical physics says orbiting charges radiate energy — every atom should collapse in a nanosecond. It stays silent on that.",
     plate: {
-      src: commons("Geiger-Marsden experiment expectation and result.svg", 1100),
+      src: commons("Geiger-Marsden experiment expectation and result.svg", 480),
       href: commonsPage("Geiger-Marsden experiment expectation and result.svg"),
       credit: "Kurzon, “Geiger–Marsden experiment expectation and result”",
       license: "CC BY-SA 4.0",
@@ -102,7 +102,7 @@ export const MODELS: AtomicModel[] = [
     gained: "Derives the Balmer series of hydrogen to four significant figures — the spectrum becomes legible.",
     limit: "Exact only for one-electron atoms; it fines nothing heavier, and ignores fine structure entirely.",
     plate: {
-      src: commons("Bohr atom model English.svg", 800),
+      src: commons("Bohr atom model English.svg", 480),
       href: commonsPage("Bohr atom model English.svg"),
       credit: "Brighterorange, “Bohr atom model”",
       license: "CC BY-SA 3.0",
@@ -122,7 +122,7 @@ export const MODELS: AtomicModel[] = [
     gained: "Explains the entire periodic table, chemical bonding, and spin. Nothing in chemistry escapes it.",
     limit: "Many-electron atoms have no closed-form solution — every real answer is a numerical approximation. This instrument says so.",
     plate: {
-      src: commons("Hydrogen Density Plots.png", 1100),
+      src: commons("Hydrogen Density Plots.png", 480),
       href: commonsPage("Hydrogen Density Plots.png"),
       credit: "PoorLeno, “Hydrogen Density Plots”",
       license: "Public domain",

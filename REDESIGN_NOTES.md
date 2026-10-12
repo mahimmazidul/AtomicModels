@@ -49,6 +49,7 @@ src/components/…            icons · Spectrum · Ticker · Reveal · Hero
 | Specimen photographs | `Specimen.tsx` sits under the stage: Wikipedia lead image by way of Commons, credited, with the article's intro extract. 94 of 118 elements; the rest say so. |
 | Data refresh | `node scripts/fetch-specimens.mjs` rewrites `src/data/specimens.ts` (page images, Commons credits, extracts). Nothing is fetched at runtime. |
 | Contrast | Both settings audited with a WCAG pass over every text node — 0 failures at 4.5:1 (3:1 for large text). |
+| Storage diet | Photographs requested at the ~500 px Commons bucket (~50 KB each, was up to 6.8 MB for full-resolution originals), plates likewise, and the service worker no longer caches opaque cross-origin images — reported storage after browsing a dozen elements fell from 61.6 MB to under 1 MB. |
 
 ## Ship it on a new branch
 
