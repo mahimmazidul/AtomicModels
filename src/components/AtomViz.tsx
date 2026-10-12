@@ -2,6 +2,7 @@ import { useMemo, useState, type CSSProperties, type ReactNode } from "react";
 import type { ElementData } from "../data/elements";
 import type { ModelKey } from "../data/models";
 import { discScatter, gasdev, mulberry32 } from "../lib/prng";
+import { useVizColors } from "../lib/theme";
 
 /* ————————————————————————————————————————————————
    The measuring stage. Everything here is a schematic,
@@ -10,8 +11,9 @@ import { discScatter, gasdev, mulberry32 } from "../lib/prng";
    ———————————————————————————————————————————————— */
 
 const C = 300;
-const PAPER = "rgba(233,228,214,1)";
-const FOG = "rgba(233,228,214,0.55)";
+/* Line work is themed by the stage, not by the page: the drawings are ink on
+   paper in the light setting and paper on ink in the dark one. */
+
 const E_CORE = "#9be8f2";
 const E_HALO = "rgba(53,189,208,0.30)";
 const N_RED = "#e5483c";
@@ -33,6 +35,7 @@ function Electron({ x, y, r = 6 }: { x: number; y: number; r?: number }) {
 }
 
 function Nucleus({ z, seed, spread = 15, charge }: { z: number; seed: number; spread?: number; charge?: boolean }) {
+  const V = useVizColors();
   const pts = useMemo(() => {
     const total = z === 1 ? 1 : Math.min(Math.ceil(z * 1.55), 22);
     return discScatter(total, spread, seed, 0.3);
@@ -52,7 +55,7 @@ function Nucleus({ z, seed, spread = 15, charge }: { z: number; seed: number; sp
         />
       ))}
       {charge && (
-        <text x={C} y={C + spread + 20} textAnchor="middle" fontSize={10.5} fill={FOG} style={mono}>
+        <text x={C} y={C + spread + 20} textAnchor="middle" fontSize={10.5} fill={V.fog} style={mono}>
           charge +{z}
         </text>
       )}
@@ -61,8 +64,9 @@ function Nucleus({ z, seed, spread = 15, charge }: { z: number; seed: number; sp
 }
 
 function Annotation({ x, y, children, anchor = "middle", opacity = 0.5 }: { x: number; y: number; children: ReactNode; anchor?: string; opacity?: number }) {
+  const V = useVizColors();
   return (
-    <text x={x} y={y} textAnchor={anchor as never} fontSize={10} fill={FOG} opacity={opacity} style={mono}>
+    <text x={x} y={y} textAnchor={anchor as never} fontSize={10} fill={V.fog} opacity={opacity} style={mono}>
       {children}
     </text>
   );
@@ -71,6 +75,7 @@ function Annotation({ x, y, children, anchor = "middle", opacity = 0.5 }: { x: n
 /* ————— I · DALTON — a solid, engraved sphere ————— */
 
 function DaltonViz({ el, seed }: { el: ElementData; seed: number }) {
+  const V = useVizColors();
   void seed;
   const hatch = useMemo(() => {
     const lines: number[] = [];
@@ -90,7 +95,7 @@ function DaltonViz({ el, seed }: { el: ElementData; seed: number }) {
         </clipPath>
       </defs>
 
-      <circle cx={C} cy={C} r={212} fill="none" stroke={FOG} strokeOpacity={0.22} strokeDasharray="2 7" />
+      <circle cx={C} cy={C} r={212} fill="none" stroke={V.fog} strokeOpacity={0.22} strokeDasharray="2 7" />
       <Annotation x={C} y={C - 226} opacity={0.45}>
         atomic edge — drawn to imply size; size itself is undefined here
       </Annotation>
@@ -116,7 +121,7 @@ function DaltonViz({ el, seed }: { el: ElementData; seed: number }) {
         </g>
       </g>
       <circle cx={C} cy={C} r={170} fill="none" stroke="#0c0c0f" strokeOpacity={0.55} strokeWidth={1.4} />
-      <circle cx={C} cy={C} r={170} fill="none" stroke={PAPER} strokeOpacity={0.35} strokeWidth={0.6} />
+      <circle cx={C} cy={C} r={170} fill="none" stroke={V.line} strokeOpacity={0.35} strokeWidth={0.6} />
 
       <text
         x={C}
@@ -141,19 +146,20 @@ function DaltonViz({ el, seed }: { el: ElementData; seed: number }) {
 /* ————— II · THOMSON — plums in a neutral jelly ————— */
 
 function ThomsonViz({ el, seed }: { el: ElementData; seed: number }) {
+  const V = useVizColors();
   const drawn = Math.min(el.z, 30);
   const pts = useMemo(() => discScatter(drawn, 168, seed, 0.14), [drawn, seed]);
   return (
     <g>
       <defs>
         <radialGradient id="thomsonJelly">
-          <stop offset="0%" stopColor="#e9e4d6" stopOpacity={0.02} />
-          <stop offset="62%" stopColor="#e9e4d6" stopOpacity={0.09} />
-          <stop offset="100%" stopColor="#e9e4d6" stopOpacity={0.22} />
+          <stop offset="0%" stopColor={V.line} stopOpacity={0.02} />
+          <stop offset="62%" stopColor={V.line} stopOpacity={0.09} />
+          <stop offset="100%" stopColor={V.line} stopOpacity={0.22} />
         </radialGradient>
       </defs>
 
-      <circle cx={C} cy={C} r={198} fill="url(#thomsonJelly)" stroke={PAPER} strokeOpacity={0.4} strokeWidth={1.2} />
+      <circle cx={C} cy={C} r={198} fill="url(#thomsonJelly)" stroke={V.line} strokeOpacity={0.4} strokeWidth={1.2} />
       <Annotation x={C} y={C - 218} opacity={0.5}>
         positive charge — uniform “jelly”, no nucleus
       </Annotation>
@@ -167,8 +173,8 @@ function ThomsonViz({ el, seed }: { el: ElementData; seed: number }) {
       >
         {pts.map((p, i) => (
           <g key={i}>
-            <circle cx={C + p.x} cy={C + p.y} r={8} fill="#0d0d10" stroke={PAPER} strokeOpacity={0.75} strokeWidth={1} />
-            <line x1={C + p.x - 3} x2={C + p.x + 3} y1={C + p.y} y2={C + p.y} stroke={PAPER} strokeWidth={1.2} />
+            <circle cx={C + p.x} cy={C + p.y} r={8} fill={V.bg} stroke={V.line} strokeOpacity={0.75} strokeWidth={1} />
+            <line x1={C + p.x - 3} x2={C + p.x + 3} y1={C + p.y} y2={C + p.y} stroke={V.line} strokeWidth={1.2} />
           </g>
         ))}
       </g>
@@ -179,6 +185,7 @@ function ThomsonViz({ el, seed }: { el: ElementData; seed: number }) {
 /* ————— III · RUTHERFORD — a speck, then mostly nothing ————— */
 
 function RutherfordViz({ el, seed }: { el: ElementData; seed: number }) {
+  const V = useVizColors();
   const drawn = Math.min(el.z, 18);
   const orbits = useMemo(() => {
     const tilts = [-28, 26, 92];
@@ -203,14 +210,14 @@ function RutherfordViz({ el, seed }: { el: ElementData; seed: number }) {
   return (
     <g>
       {/* the whole atom — drawn honestly as void */}
-      <circle cx={C} cy={C} r={272} fill="none" stroke={FOG} strokeOpacity={0.25} strokeDasharray="2 7" />
+      <circle cx={C} cy={C} r={272} fill="none" stroke={V.fog} strokeOpacity={0.25} strokeDasharray="2 7" />
       <Annotation x={C} y={C - 280} opacity={0.5}>
         ∅(atom) ≈ 10⁻¹⁰ m — the rest is empty
       </Annotation>
 
       {orbits.map((o, i) => (
         <g key={i} transform={`rotate(${o.tilt} ${C} ${C})`}>
-          <ellipse cx={C} cy={C} rx={o.rx} ry={o.rx * o.s} fill="none" stroke={PAPER} strokeOpacity={0.26} strokeWidth={1} />
+          <ellipse cx={C} cy={C} rx={o.rx} ry={o.rx * o.s} fill="none" stroke={V.line} strokeOpacity={0.26} strokeWidth={1} />
           <g transform={`translate(${C} ${C}) scale(1 ${o.s}) translate(${-C} ${-C})`}>
             <g
               className={o.rev ? "orbit-rev" : "orbit"}
@@ -240,6 +247,7 @@ function RutherfordViz({ el, seed }: { el: ElementData; seed: number }) {
 /* ————— IV · BOHR — rungs, and only rungs ————— */
 
 function BohrViz({ el, seed }: { el: ElementData; seed: number }) {
+  const V = useVizColors();
   const [hover, setHover] = useState<number | null>(null);
   const n = el.shells.length;
   const radii = useMemo(() => {
@@ -266,7 +274,7 @@ function BohrViz({ el, seed }: { el: ElementData; seed: number }) {
               cy={C}
               r={r}
               fill="none"
-              stroke={hover === i ? "#35bdd0" : PAPER}
+              stroke={hover === i ? "#35bdd0" : V.line}
               strokeOpacity={hover === i ? 0.95 : 0.3}
               strokeWidth={hover === i ? 1.4 : 1}
             />
@@ -282,9 +290,9 @@ function BohrViz({ el, seed }: { el: ElementData; seed: number }) {
               x={lx}
               y={ly}
               fontSize={9.5}
-              fill={hover === i ? "#9be8f2" : FOG}
+              fill={hover === i ? "#9be8f2" : V.fog}
               style={{ ...mono, paintOrder: "stroke" }}
-              stroke="#0c0c0f"
+              stroke={V.bg}
               strokeWidth={4}
             >
               n={i + 1}
@@ -319,6 +327,7 @@ function BohrViz({ el, seed }: { el: ElementData; seed: number }) {
 /* ————— V · QUANTUM — the end of the path ————— */
 
 function QuantumViz({ el, seed }: { el: ElementData; seed: number }) {
+  const V = useVizColors();
   const n = el.shells.length;
   const radii = useMemo(() => {
     if (n === 1) return [92];
@@ -370,7 +379,7 @@ function QuantumViz({ el, seed }: { el: ElementData; seed: number }) {
         cy={C}
         r={radii[radii.length - 1] + 30}
         fill="none"
-        stroke={FOG}
+        stroke={V.fog}
         strokeOpacity={0.22}
         strokeDasharray="2 7"
       />

@@ -3,7 +3,7 @@
   "private": true,
   "version": "2.0.0",
   "type": "module",
-  "description": "An instrument for the indivisible: five major atomic models — Dalton, Thomson, Rutherford, Bohr and the quantum cloud — drawn per element across all 118 elements, with historical plates and a chronology of 1803–1926.",
+  "description": "An instrument for the indivisible: five major atomic models \u2014 Dalton, Thomson, Rutherford, Bohr and the quantum cloud \u2014 drawn per element across all 118 elements, with historical plates and a chronology of 1803\u20131926.",
   "keywords": [
     "atomic-models",
     "dalton",
@@ -26,9 +26,12 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "specimens": "node scripts/fetch-specimens.mjs"
   },
-  "engines": { "node": ">=20" },
+  "engines": {
+    "node": ">=20"
+  },
   "dependencies": {
     "clsx": "2.1.1",
     "lucide-react": "^1.55.0",

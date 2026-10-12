@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import type { ModelKey } from "./data/models";
 import Hero from "./components/Hero";
 import Ticker from "./components/Ticker";
@@ -8,6 +8,8 @@ import Chronicle from "./components/Chronicle";
 import Honesty from "./components/Honesty";
 import Footer from "./components/Footer";
 import { InstrumentMark } from "./components/icons";
+import ThemeToggle from "./components/ThemeToggle";
+import { toggleTheme } from "./lib/theme";
 
 const NAV = [
   ["Instrument", "#instrument"],
@@ -35,9 +37,10 @@ function Header() {
               {label}
             </a>
           ))}
+          <ThemeToggle className="md:ml-2" />
           <a
             href="#instrument"
-            className="border border-paper/60 px-3.5 py-2 font-mono text-[9.5px] tracking-[0.24em] text-paper transition-colors hover:bg-paper hover:text-ink md:ml-2"
+            className="border border-paper/60 px-3.5 py-2 font-mono text-[9.5px] tracking-[0.24em] text-paper transition-colors hover:bg-paper hover:text-ink"
           >
             OPERATE
           </a>
@@ -50,6 +53,17 @@ function Header() {
 export default function App() {
   const [z, setZ] = useState(26); // iron — a fine first specimen
   const [model, setModel] = useState<ModelKey>("bohr");
+
+  /* T swaps ink and paper from anywhere outside a text field. */
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const t = e.target as HTMLElement | null;
+      if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.isContentEditable)) return;
+      if (e.key.toLowerCase() === "t" && !e.metaKey && !e.ctrlKey && !e.altKey) toggleTheme();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
 
   const pick = useCallback((zz: number) => {
     setZ(zz);

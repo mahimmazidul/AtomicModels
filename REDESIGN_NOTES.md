@@ -41,6 +41,15 @@ src/components/…            icons · Spectrum · Ticker · Reveal · Hero
                             Honesty · Footer
 ```
 
+## Revision II, second pass
+
+| Feature | Where |
+| --- | --- |
+| Dark / light setting | Header toggle (`ThemeToggle.tsx`), `T` key, `lib/theme.ts`. Both drawings and chrome follow it; the choice is stored, otherwise the system decides. |
+| Specimen photographs | `Specimen.tsx` sits under the stage: Wikipedia lead image by way of Commons, credited, with the article's intro extract. 94 of 118 elements; the rest say so. |
+| Data refresh | `node scripts/fetch-specimens.mjs` rewrites `src/data/specimens.ts` (page images, Commons credits, extracts). Nothing is fetched at runtime. |
+| Contrast | Both settings audited with a WCAG pass over every text node — 0 failures at 4.5:1 (3:1 for large text). |
+
 ## Ship it on a new branch
 
 ```bash

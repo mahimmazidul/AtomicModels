@@ -2,6 +2,11 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App";
+import { initTheme } from "./lib/theme";
+
+// The boot script in index.html has already set the attribute; this syncs
+// the module state and the browser chrome colour with it.
+initTheme();
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

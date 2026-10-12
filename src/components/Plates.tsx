@@ -28,7 +28,7 @@ export default function Plates() {
           <div>
             <p className="kicker kicker-ink mb-4">№ 02 · The archive</p>
             <h2 className="font-display text-[clamp(2.4rem,5.4vw,4.2rem)] leading-[0.95] tracking-[-0.01em]">
-              The record, <em className="font-light italic text-hgamma">as drawn</em>
+              The record, <em className="slab-accent-cool font-light italic">as drawn</em>
             </h2>
           </div>
           <p className="max-w-[34ch] pb-1 font-mono text-[11px] leading-relaxed tracking-[0.06em] text-ink/55">
@@ -45,16 +45,16 @@ export default function Plates() {
                 <div className="plate-frame border border-ink/25 bg-[#fbf9f2] p-3 shadow-[0_10px_36px_-18px_rgba(12,12,15,0.3)]">
                   <div className="flex items-center justify-between px-1 pb-3 pt-1">
                     <span className="flex items-center gap-2.5">
-                      <Icon size={17} className="text-ink/70" />
-                      <span className="font-mono text-[10px] tracking-[0.3em] text-ink/70">
+                      <Icon size={17} className="mat-ink-70" />
+                      <span className="mat-ink-70 font-mono text-[10px] tracking-[0.3em]">
                         PLATE {m.numeral}
                       </span>
                     </span>
-                    <span className="font-mono text-[10px] tracking-[0.24em] text-ink/50">
+                    <span className="mat-ink-50 font-mono text-[10px] tracking-[0.24em]">
                       {m.year}
                     </span>
                   </div>
-                  <div className="overflow-hidden border border-ink/15 bg-white">
+                  <div className="mat-line overflow-hidden border bg-white">
                     <img
                       src={m.plate.src}
                       alt={m.plate.alt}
@@ -63,18 +63,18 @@ export default function Plates() {
                     />
                   </div>
                   <figcaption className="px-1 pb-2 pt-4">
-                    <p className="font-display text-[14.5px] italic leading-relaxed text-ink/85">
+                    <p className="mat-ink-85 font-display text-[14.5px] italic leading-relaxed">
                       {m.plate.caption}
                     </p>
-                    <div className="mt-4 flex items-baseline justify-between gap-3 border-t border-dashed border-ink/25 pt-3">
-                      <span className="font-mono text-[9.5px] leading-relaxed tracking-[0.08em] text-ink/55">
+                    <div className="mat-rule mt-4 flex items-baseline justify-between gap-3 pt-3">
+                      <span className="mat-ink-55 font-mono text-[9.5px] leading-relaxed tracking-[0.08em]">
                         {m.plate.credit} · {m.plate.license}
                       </span>
                       <a
                         href={m.plate.href}
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-flex shrink-0 items-center gap-1 font-mono text-[9.5px] tracking-[0.16em] text-ink/70 transition-colors hover:text-halpha"
+                        className="mat-ink-70 inline-flex shrink-0 items-center gap-1 font-mono text-[9.5px] tracking-[0.16em] transition-colors hover:text-halpha"
                       >
                         COMMONS <ArrowUpRight size={11} />
                       </a>
