@@ -53,6 +53,10 @@ English Wikipedia article, by way of Wikimedia Commons, at reference size
 are printed beneath the frame, and the caption carries the article's plain-text
 intro extract about two sentences long.
 
+- Photographs are requested through `Special:FilePath?width=480`, which lands on
+  Commons' ~500 px bucket and delivers about 40–60 KB each — the wikitext-style
+  thumbnail paths refuse any width Commons has not already rendered, so that
+  route is the one that always resolves.
 - **94 of 118 elements** have a lead photograph (through Californium). The
   remaining 24 — Einsteinium and everything heavier, plus technetium, hafnium,
   radon and francium — have no Commons lead image; those show an explicit
@@ -74,7 +78,7 @@ intro extract about two sentences long.
 - **React 19** + **TypeScript**, **Vite 7**, **Tailwind CSS 4** (`@tailwindcss/vite`), `lucide-react` for interface icons, custom SVG marks for the five models.
 - **`vite-plugin-singlefile`** inlines every script and stylesheet, so `npm run build` emits one `dist/index.html` that can be dropped anywhere.
 - **Fraunces** and **IBM Plex Mono** via Google Fonts; the five historical plates are hot-linked from Wikimedia Commons with their credits and licences shown beneath each frame.
-- **Service worker** (`public/sw.js`) for offline use: network-first navigations, cache-first same-origin assets, and a bounded runtime cache for fonts and plates.
+- **Service worker** (`public/sw.js`) for offline use: network-first navigations, cache-first same-origin assets, and a size-capped runtime cache for web fonts. Photographs are deliberately **not** cached by the worker — Chromium charges an opaque cross-origin response several megabytes of storage quota regardless of its real size, so caching a dozen photographs inflated reported storage by tens of megabytes. The browser's ordinary HTTP cache holds them instead.
 - No state library, no CSS-in-JS, no analytics, no third-party scripts.
 
 ## Quick start
@@ -96,6 +100,7 @@ npm run preview    # serve the built file
 | `npm run build` | Production build; inlines everything into `dist/index.html`. |
 | `npm run preview` | Serve `dist/` locally to check the real output. |
 | `node scripts/fetch-specimens.mjs` | Refresh photograph URLs, credits and extracts from Wikipedia/Commons. |
+| `node scripts/fetch-specimens.mjs --normalize-only` | Rewrite the photograph URLs in `src/data/specimens.ts` at the reference size. Pure string work, no network. |
 
 ## Project structure
 

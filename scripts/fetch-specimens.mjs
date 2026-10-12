@@ -84,16 +84,33 @@ const normFile = (f) =>
     .replace(/\s+/g, " ")
     .trim();
 
-/** Turn a Wikipedia thumbnail URL into a clean 1000 px upload.wikimedia.org URL:
-    no tracking parameters, no thumb.wikimedia.org host. */
-function cleanImage(url, w, h) {
-  if (!url) return { image: null, width: 0, height: 0 };
-  let u = url.split("?")[0].replace("//thumb.wikimedia.org/", "//upload.wikimedia.org/");
-  const px = u.match(/\/(\d+)px-([^/]+)$/);
-  // Some Commons files only render at the exact size the API named, so the
-  // width in the path is kept as-is rather than rewritten.
-  if (px) return { image: u, width: w ?? 0, height: h ?? 0 };
-  return { image: u, width: w ?? 0, height: h ?? 0 };
+/** The reference size we ask for. Wikimedia renders a small set of bucket sizes
+    (roughly 330 / 500 / 960 px for a 1280 px original), and the raw thumbnail
+    path refuses any width it has not rendered, so every photograph is requested
+    through Special:FilePath, which always resolves at a bucket size. 480 lands
+    on the ~500 px bucket — right for a 224 px frame at 2x, and about 40-60 KB. */
+const REF_WIDTH = 480;
+const sized = (file) =>
+  `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(normFile(file))}?width=${REF_WIDTH}`;
+
+/* --normalize-only rewrites the existing specimens.ts from the Commons file
+   names it already carries. The URL is a pure function of the file name, so
+   changing the requested size needs no data refresh and no network access.
+   This must run before anything reaches the API. */
+if (process.argv.includes("--normalize-only")) {
+  const existing = readFileSync(OUT, "utf8");
+  let touched = 0;
+  const rewritten = existing.replace(
+    /(  (\d+): \{[\s\S]*?file: (null|"([^"]+)"),\n)(\s*image: )(?:null|"[^"]+"),(\n    width: )\d+,(\n    height: )\d+,/g,
+    (all, head, _z, fileLiteral, file, imageKey, widthKey, heightKey) => {
+      if (fileLiteral === "null") return all;
+      touched++;
+      return `${head}${imageKey}"${sized(file)}",${widthKey}${REF_WIDTH},${heightKey}0,`;
+    },
+  );
+  writeFileSync(OUT, rewritten);
+  console.log(`normalised ${touched} photograph URLs to about 500 px (width=${REF_WIDTH}); no network used`);
+  process.exit(0);
 }
 
 function stripHtml(s) {
@@ -133,6 +150,8 @@ if (elements.length !== 118) {
 console.log(`elements parsed: ${elements.length}`);
 
 const titleOf = (el) => TITLE_OVERRIDE[el.sym] ?? el.name;
+
+
 
 /* ————————————————— 2 · lead image per article ————————————————— */
 
@@ -251,7 +270,7 @@ async function probe(url) {
   }
 }
 
-const all = [...pageImage.entries()].map(([z, img]) => ({ z, ...cleanImage(img.thumb, img.width, img.height) }));
+const all = [...pageImage.entries()].map(([z, img]) => ({ z, image: sized(img.file) }));
 const step = Math.max(1, Math.floor(all.length / 10));
 const sample = all.filter((_, i) => i % step === 0).slice(0, 10);
 
@@ -268,6 +287,8 @@ const CHOSEN = new Map(all.map((a) => [a.z, a]));
 
 /* ————————————————— 6 · write specimens.ts ————————————————— */
 
+
+
 const entries = [];
 let withPhoto = 0;
 
@@ -279,7 +300,7 @@ for (const el of elements) {
     entries.push({ z: el.z, sym: el.sym, name: el.name, wiki, extract, missing: true });
     continue;
   }
-  const chosen = CHOSEN.get(el.z) ?? cleanImage(img.thumb, img.width, img.height);
+  const chosen = { image: sized(img.file), width: REF_WIDTH, height: 0 };
   withPhoto++;
   const c = credit.get(normFile(img.file)) ?? { artist: "", license: "see file page", page: "" };
   entries.push({
@@ -306,9 +327,10 @@ lines.push(`/* Specimen photographs — one lead image per element, with the int
    from en.wikipedia.org and commons.wikimedia.org; do not hand-edit.
 
    ${withPhoto} of ${elements.length} elements have a lead photograph; the rest carry
-   the article extract and a link only. Images are hot-linked from
-   upload.wikimedia.org at reference size (about 1000 px) and every entry
-   names its author and licence. */
+   the article extract and a link only. Photographs are requested through
+   Special:FilePath at REF_WIDTH = ${REF_WIDTH} (Commons renders a small set of
+   bucket sizes, so the served file is the nearest one — roughly 40-60 KB), and
+   every entry names its author and licence. */
 
 export interface Specimen {
   z: number;
@@ -316,8 +338,10 @@ export interface Specimen {
   name: string;
   /** Commons file name, or null when the article has no lead image. */
   file: string | null;
-  /** Reference-size image URL (upload.wikimedia.org), or null. */
+  /** Photograph URL, requested at REF_WIDTH through Special:FilePath, or null. */
   image: string | null;
+  /** Width requested. Commons serves its nearest bucket, so the delivered file
+      may be wider than this; height is not known until it arrives. */
   width: number;
   height: number;
   artist: string;
